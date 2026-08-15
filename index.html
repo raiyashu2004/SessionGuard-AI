@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SessionGuard-AI — Real-Time Continuous Behavioral Biometric Zero-Trust Layer</title>
+  <meta name="description" content="Continuously prove identity and catch session hijacking in real time using keystroke dynamics, mouse kinematics, and behavioral anomaly detection.">
+  
+  <!-- Modern Typography from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/portal.css">
+</head>
+<body class="theme-dark">
+  <div id="app" class="app-wrapper">
+    <!-- Top Navigation & Global Header -->
+    <header class="top-nav">
+      <div class="nav-left">
+        <div class="brand-logo">
+          <div class="logo-shield">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4" class="logo-check"/>
+            </svg>
+            <div class="shield-pulse"></div>
+          </div>
+          <div class="brand-text">
+            <span class="brand-title">SESSION<span class="brand-highlight">GUARD</span> <span class="brand-ai-badge">AI</span></span>
+            <span class="brand-tagline">Continuous Behavioral Zero-Trust</span>
+          </div>
+        </div>
+
+        <div class="system-status-badge" id="globalStatusBadge">
+          <span class="status-dot"></span>
+          <span class="status-label" id="globalStatusText">CONTINUOUS AUTH ACTIVE</span>
+        </div>
+      </div>
+
+      <div class="nav-center">
+        <div class="profile-selector-wrapper">
+          <label for="userProfileSelect" class="profile-label">ACTIVE BASELINE:</label>
+          <select id="userProfileSelect" class="profile-select">
+            <option value="alex_vance">Alex Vance (Dev Lead — Fast Rhythmic Typist)</option>
+            <option value="sarah_lin">Dr. Sarah Lin (Analyst — Deliberate & Precise)</option>
+            <option value="custom_user" selected>My Live Enrolled Profile (You)</option>
+          </select>
+        </div>
+        <button id="btnOpenEnrollment" class="btn btn-outline-primary btn-sm" title="Re-calibrate or customize your personal behavioral baseline">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Enroll Baseline
+        </button>
+      </div>
+
+      <div class="nav-right">
+        <!-- Pitch/Demo Action Controls -->
+        <div class="demo-controls-group">
+          <button id="btnSimulateLegit" class="btn btn-demo-legit" title="Test normal legitimate user behavior">
+            <span class="btn-icon">✓</span>
+            <span>Legit User Mode</span>
+          </button>
+          
+          <button id="btnSimulateHijack" class="btn btn-demo-hijack" title="Simulate an attacker taking over the keyboard and mouse">
+            <span class="btn-icon">⚡</span>
+            <span>Simulate Attacker Takeover</span>
+          </button>
+
+          <button id="btnSimulateBot" class="btn btn-demo-bot" title="Simulate a robotic RAT / Automated macro attack">
+            <span class="btn-icon">🤖</span>
+            <span>Simulate RAT Bot</span>
+          </button>
+        </div>
+
+        <div class="nav-aux">
+          <button id="btnToggleSound" class="icon-btn" title="Toggle Audio Feedback" aria-label="Toggle Sound">
+            <svg id="soundIconOn" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            <svg id="soundIconOff" class="hidden" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+          </button>
+          <button id="btnExportForensics" class="btn btn-glass btn-sm" title="Export Security & Threat Forensic Audit Log">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Audit Log
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace Split Grid -->
+    <main class="main-split-container">
+      
+      <!-- LEFT PANE: Mock Protected Enterprise Portal (SessionGuard Vault) -->
+      <section class="portal-pane" id="portalPane">
+        <div class="portal-header">
+          <div class="portal-brand">
+            <div class="portal-icon">🛡️</div>
+            <div>
+              <h2 class="portal-title">SessionGuard Prime Enterprise Cloud</h2>
+              <span class="portal-subtitle">High-Security Production Workspace & Banking Vault</span>
+            </div>
+          </div>
+          <div class="session-meta">
+            <span class="meta-item"><span class="meta-label">Session ID:</span> <code id="sessionIdDisplay">SG-9482-TX</code></span>
+            <span class="meta-item"><span class="meta-label">Initial Auth:</span> Password + FIDO2 (08:42 AM)</span>
+          </div>
+        </div>
+
+        <!-- Portal Navigation Tabs -->
+        <div class="portal-nav-tabs">
+          <button class="tab-btn active" data-tab="wire-transfer">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Wire Transfer ($50k+)
+          </button>
+          <button class="tab-btn" data-tab="api-vault">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Production Secret Keys
+          </button>
+          <button class="tab-btn" data-tab="db-admin">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            Database Operations
+          </button>
+          <button class="tab-btn" data-tab="audit-ledger">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Audit Trail
+          </button>
+        </div>
+
+        <!-- Portal Interactive Work Area -->
+        <div class="portal-body">
+          
+          <!-- Tab 1: Wire Transfer -->
+          <div class="tab-content active" id="tab-wire-transfer">
+            <div class="portal-card">
+              <div class="card-header">
+                <h3>Authorized Corporate Wire Transfer</h3>
+                <span class="badge badge-warning">High-Risk Asset Action</span>
+              </div>
+              <p class="card-desc">Execute multi-currency corporate payments. Protected by SessionGuard continuous behavioral verification.</p>
+              
+              <form id="wireTransferForm" class="portal-form" onsubmit="return false;">
+                <div class="form-row">
+                  <div class="form-group flex-1">
+                    <label for="wireRecipient">Recipient Entity Name</label>
+                    <input type="text" id="wireRecipient" class="form-input" placeholder="e.g. Apex Global Cloud Solutions LLC" value="Apex Global Cloud Solutions LLC">
+                  </div>
+                  <div class="form-group flex-1">
+                    <label for="wireIban">Destination IBAN / Swift</label>
+                    <input type="text" id="wireIban" class="form-input mono" placeholder="CH93 0000 0000 8392 1029 4" value="US34 AEGS 9920 4820 1928 3">
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group flex-1">
+                    <label for="wireAmount">Transfer Amount ($ USD)</label>
+                    <div class="input-prefix-wrapper">
+                      <span class="input-prefix">$</span>
+                      <input type="number" id="wireAmount" class="form-input mono" value="75000" min="1000" step="500">
+                    </div>
+                  </div>
+                  <div class="form-group flex-1">
+                    <label for="wireMemo">Payment Reference Memo</label>
+                    <input type="text" id="wireMemo" class="form-input" placeholder="Type a note here..." value="Q3 Enterprise Infrastructure Retainer">
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="button" id="btnExecuteWire" class="btn btn-danger-action">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    Authorize & Disburse $75,000
+                  </button>
+                  <span class="action-security-note">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    Action automatically aborted if Trust Score drops below 75%
+                  </span>
+                </div>
+              </form>
+            </div>
+
+            <div class="portal-card recent-transfers-card">
+              <h4>Recent Settlement Dispatches</h4>
+              <div class="table-responsive">
+                <table class="portal-table">
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Recipient</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                      <th>Trust Score at Exec</th>
+                    </tr>
+                  </thead>
+                  <tbody id="settlementTableBody">
+                    <tr>
+                      <td>11:42 AM</td>
+                      <td>OctaCore Data Centers</td>
+                      <td class="mono font-bold">$120,000</td>
+                      <td><span class="badge badge-success">Settled</span></td>
+                      <td><span class="mono text-emerald">96.8% (Verified)</span></td>
+                    </tr>
+                    <tr>
+                      <td>10:15 AM</td>
+                      <td>Stripe Billing Pipeline</td>
+                      <td class="mono font-bold">$44,500</td>
+                      <td><span class="badge badge-success">Settled</span></td>
+                      <td><span class="mono text-emerald">94.2% (Verified)</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 2: Secret API Keys -->
+          <div class="tab-content" id="tab-api-vault">
+            <div class="portal-card">
+              <div class="card-header">
+                <h3>Production API Keys & Cloud Credentials</h3>
+                <span class="badge badge-warning">Zero-Trust Protected</span>
+              </div>
+              <p class="card-desc">Master keys have root level access to cloud production databases and payment gateways.</p>
+              
+              <div class="secrets-list">
+                <div class="secret-item">
+                  <div class="secret-info">
+                    <div class="secret-name">AWS_PRODUCTION_MASTER_SECRET</div>
+                    <div class="secret-val mono" id="secretAws">••••••••••••••••••••••••••••••••••••••••</div>
+                  </div>
+                  <button class="btn btn-sm btn-outline-light btn-reveal-secret" data-secret="aws">Reveal Key</button>
+                </div>
+
+                <div class="secret-item">
+                  <div class="secret-info">
+                    <div class="secret-name">STRIPE_LIVE_RESTRICTED_KEY</div>
+                    <div class="secret-val mono" id="secretStripe">••••••••••••••••••••••••••••••••••••••••</div>
+                  </div>
+                  <button class="btn btn-sm btn-outline-light btn-reveal-secret" data-secret="stripe">Reveal Key</button>
+                </div>
+
+                <div class="secret-item">
+                  <div class="secret-info">
+                    <div class="secret-name">KUBERNETES_CLUSTER_ADMIN_TOKEN</div>
+                    <div class="secret-val mono" id="secretKube">••••••••••••••••••••••••••••••••••••••••</div>
+                  </div>
+                  <button class="btn btn-sm btn-outline-light btn-reveal-secret" data-secret="kube">Reveal Key</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 3: Database Admin -->
+          <div class="tab-content" id="tab-db-admin">
+            <div class="portal-card">
+              <div class="card-header">
+                <h3>Production Cluster Operations</h3>
+                <span class="badge badge-danger">Destructive Operations</span>
+              </div>
+              <div class="db-ops-grid">
+                <div class="db-op-box">
+                  <h4>Database Snapshot & Export</h4>
+                  <p>Dump full encrypted customer database schema.</p>
+                  <button class="btn btn-primary btn-sm" id="btnDbExport">Generate Export</button>
+                </div>
+                <div class="db-op-box danger-box">
+                  <h4>Flush Session Redis Cache</h4>
+                  <p>Invalidate all global active user token stores.</p>
+                  <button class="btn btn-danger-action btn-sm" id="btnDbFlush">Flush All Tokens</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 4: Audit Ledger -->
+          <div class="tab-content" id="tab-audit-ledger">
+            <div class="portal-card">
+              <div class="card-header">
+                <h3>Real-Time Session Audit Ledger</h3>
+                <span class="badge badge-info">Immutable Log</span>
+              </div>
+              <div class="audit-stream" id="portalAuditStream">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Interactive Typing Playground Area (To give natural keyboard engagement) -->
+        <div class="portal-typing-sandbox">
+          <div class="sandbox-header">
+            <span class="sandbox-title">⚡ Interactive Behavioral Input Zone</span>
+            <span class="sandbox-hint">Type or click freely anywhere to feed live telemetry into the risk engine:</span>
+          </div>
+          <textarea id="telemetryPlaygroundInput" class="sandbox-textarea" placeholder="Type here naturally (e.g. 'Deploying release candidate v3.4 to production cluster after security review'). Notice how your dwell time, flight interval, and typing rhythm are continuously profiled in real-time..."></textarea>
+        </div>
+
+        <!-- LOCKDOWN OVERLAY (Appears when Trust Score is in Critical zone) -->
+        <div class="portal-lockdown-overlay" id="portalLockdownOverlay">
+          <div class="lockdown-modal">
+            <div class="lockdown-icon-pulse">
+              <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <h2 class="lockdown-title">SESSION ACCESS SUSPENDED</h2>
+            <div class="lockdown-score-badge">
+              <span>Current Trust Score:</span>
+              <strong id="lockdownScoreDisplay" class="mono text-danger">18.4%</strong>
+            </div>
+            <p class="lockdown-message">
+              <strong>Anomalous motor signature detected.</strong> Your continuous keystroke cadence and mouse trajectory deviate drastically from the authorized user baseline.
+            </p>
+            <div class="lockdown-anomaly-reasons" id="lockdownAnomalyReasons">
+              <div class="reason-chip">⚠️ Mouse Curvature Divergence: <strong>+312%</strong></div>
+              <div class="reason-chip">⚠️ Keystroke Flight Time Drift: <strong>+240%</strong></div>
+              <div class="reason-chip">⚠️ Micro-Jitter Inconsistency: <strong>High</strong></div>
+            </div>
+            <div class="lockdown-actions">
+              <button id="btnTriggerStepUpAuth" class="btn btn-primary btn-lg">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Authenticate via Step-Up 2FA / Biometric
+              </button>
+              <button id="btnDismissLockDemo" class="btn btn-outline-light btn-sm">
+                Reset Demo to Legit Mode
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- RIGHT PANE: SessionGuard Engine Live Command Center & Telemetry Analytics -->
+      <section class="engine-pane" id="enginePane">
+        
+        <!-- Live Trust Score Gauge Hero Section -->
+        <div class="engine-card trust-gauge-hero">
+          <div class="gauge-header">
+            <div class="gauge-title-wrap">
+              <span class="engine-badge">REAL-TIME RISK ENGINE</span>
+              <h3 class="engine-title">Continuous Identity Trust Score</h3>
+            </div>
+            <div class="confidence-indicator" id="confidenceIndicator">
+              <span class="confidence-label">Model Confidence:</span>
+              <span class="confidence-val mono" id="modelConfidenceVal">99.4%</span>
+            </div>
+          </div>
+
+          <div class="gauge-display-container">
+            <!-- Circular Canvas Gauge -->
+            <div class="gauge-canvas-wrapper">
+              <canvas id="trustGaugeCanvas" width="280" height="280"></canvas>
+              <div class="gauge-center-content">
+                <span class="gauge-score-number mono" id="trustScoreVal">96</span>
+                <span class="gauge-score-unit">/ 100</span>
+                <span class="gauge-status-label" id="trustStatusLabel">IDENTITY VERIFIED</span>
+              </div>
+            </div>
+
+            <!-- Risk Threshold Bands Legend -->
+            <div class="gauge-legend">
+              <div class="legend-item legit-band">
+                <span class="legend-dot green"></span>
+                <div class="legend-info">
+                  <span class="legend-title">90 – 100% | Verified</span>
+                  <span class="legend-desc">Zero friction, full high-security access.</span>
+                </div>
+              </div>
+              <div class="legend-item warn-band">
+                <span class="legend-dot yellow"></span>
+                <div class="legend-info">
+                  <span class="legend-title">50 – 89% | Elevated Risk</span>
+                  <span class="legend-desc">Silent telemetry flags, step-up challenge ready.</span>
+                </div>
+              </div>
+              <div class="legend-item danger-band">
+                <span class="legend-dot red"></span>
+                <div class="legend-info">
+                  <span class="legend-title">&lt; 50% | Session Hijack</span>
+                  <span class="legend-desc">Instant freeze, transactions aborted, locked.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Telemetry Tickers -->
+          <div class="telemetry-tickers-grid">
+            <div class="ticker-box">
+              <span class="ticker-label">DWELL TIME (μ)</span>
+              <span class="ticker-val mono" id="tickerDwell">98 ms</span>
+              <span class="ticker-sub mono text-emerald" id="tickerDwellDelta">Δ +2.1%</span>
+            </div>
+            <div class="ticker-box">
+              <span class="ticker-label">FLIGHT INTERVAL (μ)</span>
+              <span class="ticker-val mono" id="tickerFlight">112 ms</span>
+              <span class="ticker-sub mono text-emerald" id="tickerFlightDelta">Δ +1.4%</span>
+            </div>
+            <div class="ticker-box">
+              <span class="ticker-label">CURSOR VELOCITY (μ)</span>
+              <span class="ticker-val mono" id="tickerVelocity">420 px/s</span>
+              <span class="ticker-sub mono text-emerald" id="tickerVelocityDelta">Normal</span>
+            </div>
+            <div class="ticker-box">
+              <span class="ticker-label">PATH CURVATURE</span>
+              <span class="ticker-val mono" id="tickerCurvature">1.34</span>
+              <span class="ticker-sub mono text-emerald" id="tickerCurvatureDelta">Matched</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Biometric Anomaly Radar / Feature Breakdown -->
+        <div class="engine-card">
+          <div class="card-header-flex">
+            <h4>Behavioral Vector Divergence</h4>
+            <span class="window-timer-badge">Window: <strong id="windowTimerDisplay" class="mono">2.0s</strong></span>
+          </div>
+          
+          <div class="feature-anomaly-bars">
+            <div class="feature-bar-group">
+              <div class="feature-bar-label">
+                <span>Keystroke Dwell Dynamics (Key-Hold)</span>
+                <span class="mono feature-val-tag text-emerald" id="barValDwell">4% Divergence</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill progress-emerald" id="barFillDwell" style="width: 4%;"></div>
+              </div>
+            </div>
+
+            <div class="feature-bar-group">
+              <div class="feature-bar-label">
+                <span>Flight Time Cadence (Key-to-Key Flight)</span>
+                <span class="mono feature-val-tag text-emerald" id="barValFlight">6% Divergence</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill progress-emerald" id="barFillFlight" style="width: 6%;"></div>
+              </div>
+            </div>
+
+            <div class="feature-bar-group">
+              <div class="feature-bar-label">
+                <span>Mouse Kinematics & Velocity Profile</span>
+                <span class="mono feature-val-tag text-emerald" id="barValVelocity">5% Divergence</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill progress-emerald" id="barFillVelocity" style="width: 5%;"></div>
+              </div>
+            </div>
+
+            <div class="feature-bar-group">
+              <div class="feature-bar-label">
+                <span>Trajectory Curvature & Neuromuscular Jitter</span>
+                <span class="mono feature-val-tag text-emerald" id="barValCurvature">8% Divergence</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill progress-emerald" id="barFillCurvature" style="width: 8%;"></div>
+              </div>
+            </div>
+
+            <div class="feature-bar-group">
+              <div class="feature-bar-label">
+                <span>Click Timing & Micro-Pause Rhythm</span>
+                <span class="mono feature-val-tag text-emerald" id="barValClick">3% Divergence</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill progress-emerald" id="barFillClick" style="width: 3%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Visualizers: Mouse Kinematics & Keystroke Distribution -->
+        <div class="engine-grid-2col">
+          
+          <!-- Mouse Trajectory Canvas -->
+          <div class="engine-card visualizer-card">
+            <div class="card-header-flex">
+              <h4>Live Cursor Trajectory Physics</h4>
+              <span class="live-indicator"><span class="live-dot"></span> LIVE 60 FPS</span>
+            </div>
+            <div class="canvas-container">
+              <canvas id="mouseTrajectoryCanvas" width="320" height="180"></canvas>
+            </div>
+            <div class="canvas-footer-stats">
+              <span>Entropy: <strong class="mono" id="mouseEntropyVal">0.78</strong></span>
+              <span>Jitter: <strong class="mono" id="mouseJitterVal">Low</strong></span>
+            </div>
+          </div>
+
+          <!-- Keystroke Histogram Canvas -->
+          <div class="engine-card visualizer-card">
+            <div class="card-header-flex">
+              <h4>Dwell & Flight Time Histogram</h4>
+              <div class="canvas-legend">
+                <span class="legend-tag baseline-tag">Baseline</span>
+                <span class="legend-tag live-tag">Current</span>
+              </div>
+            </div>
+            <div class="canvas-container">
+              <canvas id="keystrokeHistCanvas" width="320" height="180"></canvas>
+            </div>
+            <div class="canvas-footer-stats">
+              <span>Sample Count: <strong class="mono" id="histSampleCount">142</strong></span>
+              <span>Mahalanobis D²: <strong class="mono" id="histDistanceVal">0.42</strong></span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Real-Time Anomaly & Scoring Stream -->
+        <div class="engine-card telemetry-stream-card">
+          <div class="card-header-flex">
+            <h4>Live Risk & Behavioral Telemetry Stream</h4>
+            <button id="btnClearTelemetryLog" class="btn-text-xs">Clear Stream</button>
+          </div>
+          <div class="telemetry-log-stream" id="telemetryLogStream">
+            <!-- Real-time log entries populated via JS -->
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- ENROLLMENT & CALIBRATION MODAL -->
+    <div class="modal-backdrop hidden" id="enrollmentModal">
+      <div class="modal-card enrollment-card">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <div class="modal-icon">🧬</div>
+            <div>
+              <h3>Enroll Personal Behavioral Baseline</h3>
+              <p>Calibrate your typing cadence and mouse kinematics in ~30 seconds.</p>
+            </div>
+          </div>
+          <button class="modal-close-btn" id="btnCloseEnrollment">&times;</button>
+        </div>
+
+        <div class="enrollment-wizard-body">
+          <div class="wizard-steps-indicator">
+            <div class="step-badge active" id="stepIndicator1">1. Typing Cadence</div>
+            <div class="step-badge" id="stepIndicator2">2. Mouse Kinematics</div>
+            <div class="step-badge" id="stepIndicator3">3. Model Training</div>
+          </div>
+
+          <!-- Stage 1: Typing Calibration -->
+          <div class="wizard-stage" id="enrollStage1">
+            <h4>Stage 1: Natural Keystroke Profiling</h4>
+            <p class="wizard-prompt-instruction">Please type the following phrase naturally at your standard rhythm and speed:</p>
+            
+            <div class="prompt-quote-box" id="enrollPromptText">
+              "Continuous authentication protects sensitive enterprise assets against unauthorized post-login session takeover."
+            </div>
+
+            <textarea id="enrollTypingInput" class="enroll-input" placeholder="Start typing the phrase above here..."></textarea>
+            
+            <div class="enroll-live-stats">
+              <span>Keystrokes captured: <strong class="mono" id="enrollKeysCaptured">0 / 80</strong></span>
+              <span>Speed: <strong class="mono" id="enrollWpm">0 WPM</strong></span>
+            </div>
+
+            <div class="wizard-footer-actions">
+              <button id="btnSkipToPreset" class="btn btn-outline-light">Use Pre-Trained Profile</button>
+              <button id="btnNextToMouseEnroll" class="btn btn-primary" disabled>Proceed to Mouse Calibration →</button>
+            </div>
+          </div>
+
+          <!-- Stage 2: Mouse Kinematics Calibration -->
+          <div class="wizard-stage hidden" id="enrollStage2">
+            <h4>Stage 2: Motor Trajectory & Click Dynamics</h4>
+            <p class="wizard-prompt-instruction">Click the targets as they appear and move your cursor naturally across the target zone:</p>
+            
+            <div class="mouse-calibration-arena" id="mouseArena">
+              <div class="arena-target" id="arenaTarget" style="top: 40%; left: 45%;">Click Me</div>
+              <span class="arena-crosshair"></span>
+            </div>
+
+            <div class="enroll-live-stats">
+              <span>Targets Cleared: <strong class="mono" id="arenaTargetsCleared">0 / 6</strong></span>
+              <span>Trajectory Vectors: <strong class="mono" id="arenaVectorsCount">0</strong></span>
+            </div>
+
+            <div class="wizard-footer-actions">
+              <button id="btnBackToTypingEnroll" class="btn btn-outline-light">← Back</button>
+              <button id="btnFinishEnrollment" class="btn btn-primary" disabled>Train & Fit Baseline Model →</button>
+            </div>
+          </div>
+
+          <!-- Stage 3: Model Fitting & Success -->
+          <div class="wizard-stage hidden" id="enrollStage3">
+            <div class="training-animation-wrapper">
+              <div class="spinner-orbit"></div>
+              <h4>Fitting Multivariate Gaussian & Isolation Forest Baseline...</h4>
+              <p>Calculating mean vector μ, covariance matrix Σ, and quantile bounds.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP-UP 2FA / BIOMETRIC CHALLENGE MODAL -->
+    <div class="modal-backdrop hidden" id="stepUpModal">
+      <div class="modal-card stepup-card">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <div class="modal-icon text-warning">🛡️</div>
+            <div>
+              <h3>Step-Up Identity Challenge</h3>
+              <p>Behavioral divergence threshold exceeded. Re-authenticate to restore session.</p>
+            </div>
+          </div>
+          <button class="modal-close-btn" id="btnCloseStepUp">&times;</button>
+        </div>
+
+        <div class="stepup-body">
+          <div class="stepup-method-selector">
+            <button class="method-btn active" data-method="fido">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 0 0-10 10c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+              <span>Touch ID / Passkey</span>
+            </button>
+            <button class="method-btn" data-method="pin">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span>Emergency Master PIN</span>
+            </button>
+          </div>
+
+          <!-- Passkey Tab -->
+          <div class="stepup-tab active" id="stepupTabFido">
+            <div class="fido-prompt-box">
+              <div class="fido-fingerprint-pulse" id="fingerprintPulse">
+                <svg viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M12 2a10 10 0 0 0-6.88 17.23M18.88 19.23A10 10 0 0 0 12 2"/>
+                  <path d="M12 6a6 6 0 0 0-4.13 10.34M16.13 16.34A6 6 0 0 0 12 6"/>
+                  <path d="M12 10a2 2 0 0 0-1.38 3.45M13.38 13.45A2 2 0 0 0 12 10"/>
+                </svg>
+              </div>
+              <p>Simulate hardware biometric sensor verification</p>
+              <button id="btnSimulateTouchId" class="btn btn-primary btn-lg">
+                Authenticate Biometric Passkey
+              </button>
+            </div>
+          </div>
+
+          <!-- PIN Tab -->
+          <div class="stepup-tab hidden" id="stepupTabPin">
+            <div class="pin-entry-box">
+              <label for="masterPinInput">Enter 6-Digit Master Security PIN (Demo: <code>739281</code>)</label>
+              <input type="password" id="masterPinInput" class="form-input pin-input mono" maxlength="6" placeholder="• • • • • •">
+              <button id="btnSubmitPin" class="btn btn-primary mt-3">Verify Security PIN</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORENSIC AUDIT EXPORT MODAL -->
+    <div class="modal-backdrop hidden" id="forensicModal">
+      <div class="modal-card forensic-card">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <div class="modal-icon text-emerald">📊</div>
+            <div>
+              <h3>SOC Forensic Threat & Anomaly Report</h3>
+              <p>Exportable cryptographically tagged telemetry data for incident response.</p>
+            </div>
+          </div>
+          <button class="modal-close-btn" id="btnCloseForensic">&times;</button>
+        </div>
+
+        <div class="forensic-body">
+          <div class="forensic-json-preview">
+            <pre><code id="forensicJsonContent" class="mono">Generating report...</code></pre>
+          </div>
+          <div class="modal-footer-actions">
+            <button id="btnDownloadJson" class="btn btn-primary">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download JSON Report
+            </button>
+            <button id="btnDownloadCsv" class="btn btn-outline-light">
+              Download CSV Vectors
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+  </div>
+
+  <!-- JavaScript Application Modules -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
