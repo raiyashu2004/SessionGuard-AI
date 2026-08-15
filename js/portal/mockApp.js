@@ -24,7 +24,7 @@ export class MockPortalController {
 
   _bindPortalEvents() {
     // 1. Navigation Tab Switching
-    const tabBtns = document.querySelectorAll('.app-tabs .app-tab-btn, .portal-nav-tabs .tab-btn');
+    const tabBtns = document.querySelectorAll('.portal-nav-tabs .tab-btn');
     tabBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         const targetTab = btn.getAttribute('data-tab');
@@ -32,7 +32,7 @@ export class MockPortalController {
         tabBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
 
-        document.querySelectorAll('.tab-pane, .tab-content').forEach(tc => {
+        document.querySelectorAll('.portal-body .tab-content').forEach(tc => {
           tc.classList.remove('active');
         });
 
