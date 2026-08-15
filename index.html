@@ -43,16 +43,26 @@
 
       <div class="nav-center">
         <div class="profile-selector-wrapper">
-          <label for="userProfileSelect" class="profile-label">ACTIVE BASELINE:</label>
+          <label for="userProfileSelect" class="profile-label">BASELINE:</label>
           <select id="userProfileSelect" class="profile-select">
-            <option value="alex_vance">Alex Vance (Dev Lead — Fast Rhythmic Typist)</option>
-            <option value="sarah_lin">Dr. Sarah Lin (Analyst — Deliberate & Precise)</option>
-            <option value="custom_user" selected>My Live Enrolled Profile (You)</option>
+            <option value="alex_vance">Alex Vance (Dev Lead — Fast Typist)</option>
+            <option value="sarah_lin">Dr. Sarah Lin (Analyst — Precise)</option>
+            <option value="custom_user" selected>Live Calibrated Baseline (You)</option>
           </select>
         </div>
+
+        <div class="profile-selector-wrapper policy-wrapper">
+          <label for="policySelect" class="profile-label">POLICY:</label>
+          <select id="policySelect" class="profile-select">
+            <option value="balanced" selected>Balanced (Standard Zero-Trust)</option>
+            <option value="strict">Strict (High-Compliance Banking)</option>
+            <option value="permissive">Permissive (Low-Friction)</option>
+          </select>
+        </div>
+
         <button id="btnOpenEnrollment" class="btn btn-outline-primary btn-sm" title="Re-calibrate or customize your personal behavioral baseline">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          Enroll Baseline
+          Enroll
         </button>
       </div>
 
@@ -61,17 +71,22 @@
         <div class="demo-controls-group">
           <button id="btnSimulateLegit" class="btn btn-demo-legit" title="Test normal legitimate user behavior">
             <span class="btn-icon">✓</span>
-            <span>Legit User Mode</span>
+            <span>Legit</span>
           </button>
           
           <button id="btnSimulateHijack" class="btn btn-demo-hijack" title="Simulate an attacker taking over the keyboard and mouse">
             <span class="btn-icon">⚡</span>
-            <span>Simulate Attacker Takeover</span>
+            <span>Attacker Takeover</span>
           </button>
 
           <button id="btnSimulateBot" class="btn btn-demo-bot" title="Simulate a robotic RAT / Automated macro attack">
             <span class="btn-icon">🤖</span>
-            <span>Simulate RAT Bot</span>
+            <span>RAT Bot</span>
+          </button>
+
+          <button id="btnSimulateStuffer" class="btn btn-demo-stuffer" title="Simulate high-frequency credential stuffing macro">
+            <span class="btn-icon">💥</span>
+            <span>Credential Macro</span>
           </button>
         </div>
 
@@ -289,8 +304,15 @@
         <!-- Interactive Typing Playground Area (To give natural keyboard engagement) -->
         <div class="portal-typing-sandbox">
           <div class="sandbox-header">
-            <span class="sandbox-title">⚡ Interactive Behavioral Input Zone</span>
-            <span class="sandbox-hint">Type or click freely anywhere to feed live telemetry into the risk engine:</span>
+            <div class="sandbox-title-group">
+              <span class="sandbox-title">⚡ Interactive Behavioral Input Zone</span>
+              <span class="sandbox-hint">Type naturally or click sample prompts to generate telemetry:</span>
+            </div>
+            <div class="prompt-chips-group">
+              <button class="prompt-chip" data-text="Authorizing secondary settlement dispatch for Q3 infrastructure compute resources across regional zones.">💳 Wire Release</button>
+              <button class="prompt-chip" data-text="Deploying production release candidate v3.4 to secure Kubernetes cluster after automated compliance verification.">🚀 Cloud Deploy</button>
+              <button class="prompt-chip" data-text="Security incident response team investigating anomalous token revocation event in production audit log.">🛡️ SOC Report</button>
+            </div>
           </div>
           <textarea id="telemetryPlaygroundInput" class="sandbox-textarea" placeholder="Type here naturally (e.g. 'Deploying release candidate v3.4 to production cluster after security review'). Notice how your dwell time, flight interval, and typing rhythm are continuously profiled in real-time..."></textarea>
         </div>

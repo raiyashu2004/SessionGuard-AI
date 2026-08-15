@@ -12,7 +12,7 @@ export class AttackSimulator {
     this.visualizerMouse = visualizerMouse;
     this.toast = toastFn;
 
-    this.activeMode = 'legit'; // 'legit' | 'hijack' | 'bot'
+    this.activeMode = 'legit'; // 'legit' | 'hijack' | 'bot' | 'stuffer'
     this.simInterval = null;
 
     this._bindControls();
@@ -22,6 +22,7 @@ export class AttackSimulator {
     const btnLegit = document.getElementById('btnSimulateLegit');
     const btnHijack = document.getElementById('btnSimulateHijack');
     const btnBot = document.getElementById('btnSimulateBot');
+    const btnStuffer = document.getElementById('btnSimulateStuffer');
 
     if (btnLegit) {
       btnLegit.addEventListener('click', () => this.setMode('legit'));
@@ -31,6 +32,9 @@ export class AttackSimulator {
     }
     if (btnBot) {
       btnBot.addEventListener('click', () => this.setMode('bot'));
+    }
+    if (btnStuffer) {
+      btnStuffer.addEventListener('click', () => this.setMode('stuffer'));
     }
   }
 
@@ -61,6 +65,13 @@ export class AttackSimulator {
       });
       this.toast('🤖 ATTACK SIMULATION: Robotic RAT macro injected!', 'amber');
       this._startSimulatedMovementStream('bot');
+    } else if (mode === 'stuffer') {
+      this.model.setSyntheticAnomalyOverride({
+        type: 'stuffer',
+        severity: 0.94
+      });
+      this.toast('💥 ATTACK SIMULATION: Automated Credential Stuffer active!', 'crimson');
+      this._startSimulatedMovementStream('stuffer');
     }
   }
 
@@ -68,14 +79,17 @@ export class AttackSimulator {
     const btnLegit = document.getElementById('btnSimulateLegit');
     const btnHijack = document.getElementById('btnSimulateHijack');
     const btnBot = document.getElementById('btnSimulateBot');
+    const btnStuffer = document.getElementById('btnSimulateStuffer');
 
     btnLegit?.classList.remove('active');
     btnHijack?.classList.remove('active');
     btnBot?.classList.remove('active');
+    btnStuffer?.classList.remove('active');
 
     if (this.activeMode === 'legit') btnLegit?.classList.add('active');
     if (this.activeMode === 'hijack') btnHijack?.classList.add('active');
     if (this.activeMode === 'bot') btnBot?.classList.add('active');
+    if (this.activeMode === 'stuffer') btnStuffer?.classList.add('active');
   }
 
   _startSimulatedMovementStream(type) {
@@ -84,16 +98,21 @@ export class AttackSimulator {
       step++;
       if (type === 'hijack') {
         // Erratic jagged human movements
-        const x = (Math.sin(step * 0.4) * 0.4 + 0.5) * window.innerWidth + (Math.random() - 0.5) * 120;
-        const y = (Math.cos(step * 0.3) * 0.3 + 0.5) * window.innerHeight + (Math.random() - 0.5) * 120;
+        const x = (Math.sin(step * 0.45) * 0.4 + 0.5) * window.innerWidth + (Math.random() - 0.5) * 140;
+        const y = (Math.cos(step * 0.35) * 0.3 + 0.5) * window.innerHeight + (Math.random() - 0.5) * 140;
         this.visualizerMouse.addPoint(x, y, 780);
-      } else {
+      } else if (type === 'bot') {
         // Linear robotic jumps
-        const x = (step % 10) * (window.innerWidth / 10);
-        const y = 300;
+        const x = (step % 12) * (window.innerWidth / 12);
+        const y = 280;
         this.visualizerMouse.addPoint(x, y, 1200);
+      } else if (type === 'stuffer') {
+        // Rapid staccato oscillations
+        const x = window.innerWidth * 0.5 + (step % 2 === 0 ? 80 : -80);
+        const y = window.innerHeight * 0.5 + (step % 3 === 0 ? 50 : -50);
+        this.visualizerMouse.addPoint(x, y, 950);
       }
-    }, 120);
+    }, 110);
   }
 
   destroy() {

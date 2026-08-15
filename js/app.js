@@ -94,6 +94,31 @@ class SessionGuardApp {
       });
     }
 
+    // Policy Sensitivity Switcher
+    const policySelect = document.getElementById('policySelect');
+    if (policySelect) {
+      policySelect.addEventListener('change', (e) => {
+        const pKey = e.target.value;
+        this.riskEngine.setPolicy(pKey);
+        this.showToast(`Zero-Trust Risk Policy updated to: ${pKey.toUpperCase()}`, 'cyan');
+      });
+    }
+
+    // Interactive Prompt Chips in Sandbox
+    const promptChips = document.querySelectorAll('.prompt-chip');
+    const sandboxInput = document.getElementById('telemetryPlaygroundInput');
+    promptChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        const text = chip.getAttribute('data-text');
+        if (sandboxInput && text) {
+          sandboxInput.value = text;
+          sandboxInput.focus();
+          soundFX.playSubtleTick();
+          this.showToast('Injected behavioral simulation prompt!', 'emerald');
+        }
+      });
+    });
+
     // Profile Switcher
     const profileSelect = document.getElementById('userProfileSelect');
     if (profileSelect) {
@@ -142,12 +167,19 @@ class SessionGuardApp {
 
   _updateDashboardUI(payload) {
     const score = payload.trustScore;
+    const confidence = payload.modelConfidence;
     const state = payload.state;
     const scoreResult = payload.scoreResult;
     const features = payload.liveFeatures;
 
     // 1. Update Canvas Gauge
     this.gaugeVis.setScore(score);
+
+    // 2. Update Model Confidence
+    const confElem = document.getElementById('modelConfidenceVal');
+    if (confElem && confidence) {
+      confElem.innerText = `${confidence}%`;
+    }
 
     // 2. Update Gauge Center Typography
     const scoreValElem = document.getElementById('trustScoreVal');

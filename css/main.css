@@ -422,6 +422,19 @@ body::before {
   color: #fff;
 }
 
+.btn-demo-stuffer {
+  background: rgba(168, 85, 247, 0.14);
+  border-color: rgba(168, 85, 247, 0.35);
+  color: #c084fc;
+}
+
+.btn-demo-stuffer:hover, .btn-demo-stuffer.active {
+  background: rgba(168, 85, 247, 0.28);
+  border-color: #a855f7;
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.4);
+  color: #fff;
+}
+
 .icon-btn {
   background: transparent;
   border: 1px solid var(--border-subtle);

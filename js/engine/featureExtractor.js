@@ -2,15 +2,15 @@
  * Behavioral Feature Extractor & Mathematical Transformation Engine
  * 
  * Transforms raw temporal events into normalized behavioral vector representations.
+ * Handles cognitive idle pauses, trackpad bezier smoothing, and jitter entropy.
  */
 
 export class FeatureExtractor {
   constructor() {
-    // Rolling cache of historical events for smooth windowing
     this.keyHistory = [];
     this.mouseHistory = [];
     this.clickHistory = [];
-    this.maxHistorySize = 250;
+    this.maxHistorySize = 300;
   }
 
   /**
@@ -48,9 +48,12 @@ export class FeatureExtractor {
     // Extract Click Features
     const clickFeatures = this._extractClickFeatures(eventWindow.clicks, this.clickHistory);
 
+    const totalSamples = (eventWindow.keys?.length || 0) + (eventWindow.mouse?.length || 0) + (eventWindow.clicks?.length || 0);
+
     return {
       timestamp: eventWindow.timestamp || Date.now(),
-      sampleCount: (eventWindow.keys?.length || 0) + (eventWindow.mouse?.length || 0) + (eventWindow.clicks?.length || 0),
+      sampleCount: totalSamples,
+      cumulativeHistoryCount: this.keyHistory.length + this.mouseHistory.length + this.clickHistory.length,
       features: {
         ...keyFeatures,
         ...mouseFeatures,
@@ -65,10 +68,11 @@ export class FeatureExtractor {
     const flightTimes = [];
 
     activeKeys.forEach(k => {
-      if (k.dwellTime !== undefined && k.dwellTime > 0) {
+      if (k.dwellTime !== undefined && k.dwellTime >= 15 && k.dwellTime <= 600) {
         dwellTimes.push(k.dwellTime);
       }
-      if (k.flightTime !== undefined && k.flightTime > 0 && k.flightTime < 1500) {
+      // Only consider true intra-word & inter-word flights; ignore idle cognitive pauses (>1200ms)
+      if (k.flightTime !== undefined && k.flightTime >= 5 && k.flightTime <= 1200) {
         flightTimes.push(k.flightTime);
       }
     });
@@ -77,20 +81,20 @@ export class FeatureExtractor {
     const dwellStd = dwellTimes.length > 1 ? this._std(dwellTimes, dwellMean) : 18.0;
     
     const flightMean = flightTimes.length > 0 ? this._mean(flightTimes) : 110.0;
-    const flightStd = flightTimes.length > 1 ? this._std(flightTimes, flightMean) : 25.0;
+    const flightStd = flightTimes.length > 1 ? this._std(flightTimes, flightMean) : 24.0;
 
     // Approximate WPM based on average flight + dwell interval (5 chars / word)
     const avgCharTime = (dwellMean + flightMean);
     const wpm = avgCharTime > 0 ? Math.min(160, Math.max(10, Math.round(60000 / (avgCharTime * 5)))) : 45;
 
     return {
-      dwellMean,
-      dwellStd,
-      flightMean,
-      flightStd,
+      dwellMean: Number(dwellMean.toFixed(1)),
+      dwellStd: Number(dwellStd.toFixed(1)),
+      flightMean: Number(flightMean.toFixed(1)),
+      flightStd: Number(flightStd.toFixed(1)),
       wpm,
-      keyDwellSamples: dwellTimes.slice(-20),
-      keyFlightSamples: flightTimes.slice(-20)
+      keyDwellSamples: dwellTimes.slice(-25),
+      keyFlightSamples: flightTimes.slice(-25)
     };
   }
 
@@ -99,11 +103,11 @@ export class FeatureExtractor {
 
     if (activeMouse.length < 3) {
       return {
-        velocityMean: 380,
-        velocityStd: 90,
-        accelerationMean: 450,
-        curvatureIndex: 1.25,
-        jitterEntropy: 0.65,
+        velocityMean: 380.0,
+        velocityStd: 85.0,
+        accelerationMean: 420.0,
+        curvatureIndex: 1.28,
+        jitterEntropy: 0.55,
         trajectoryLength: 0
       };
     }
@@ -120,34 +124,34 @@ export class FeatureExtractor {
       const dist = Math.sqrt(dx * dx + dy * dy);
       pathLength += dist;
 
-      if (p2.speed !== undefined) {
+      if (p2.speed !== undefined && p2.speed > 5) {
         speeds.push(p2.speed);
       }
 
       if (p1.speed !== undefined && p2.speed !== undefined && p2.dt > 0) {
         const dv = Math.abs(p2.speed - p1.speed);
         const acc = (dv / p2.dt) * 1000;
-        accelerations.push(acc);
+        if (acc < 5000) accelerations.push(acc);
       }
     }
 
-    const velocityMean = speeds.length > 0 ? this._mean(speeds) : 380;
-    const velocityStd = speeds.length > 1 ? this._std(speeds, velocityMean) : 90;
-    const accelerationMean = accelerations.length > 0 ? this._mean(accelerations) : 450;
+    const velocityMean = speeds.length > 0 ? this._mean(speeds) : 380.0;
+    const velocityStd = speeds.length > 1 ? this._std(speeds, velocityMean) : 85.0;
+    const accelerationMean = accelerations.length > 0 ? this._mean(accelerations) : 420.0;
 
-    // Curvature Index: Total Path Length / Straight Line Euclidean Distance
+    // Curvature Index: Path Length / Euclidean Straight-line distance
     const startPoint = activeMouse[0];
     const endPoint = activeMouse[activeMouse.length - 1];
     const straightDist = Math.sqrt(
       Math.pow(endPoint.x - startPoint.x, 2) + Math.pow(endPoint.y - startPoint.y, 2)
     );
 
-    let curvatureIndex = 1.25;
-    if (straightDist > 15 && pathLength >= straightDist) {
-      curvatureIndex = Math.min(5.0, pathLength / straightDist);
+    let curvatureIndex = 1.28;
+    if (straightDist > 20 && pathLength >= straightDist) {
+      curvatureIndex = Math.min(4.5, pathLength / straightDist);
     }
 
-    // Neuromuscular Jitter / Angular Entropy
+    // Neuromuscular Jitter / Angular Directional Entropy
     let angleChanges = 0;
     for (let i = 2; i < activeMouse.length; i++) {
       const a = activeMouse[i - 2];
@@ -156,31 +160,32 @@ export class FeatureExtractor {
       
       const angle1 = Math.atan2(b.y - a.y, b.x - a.x);
       const angle2 = Math.atan2(c.y - b.y, c.x - b.x);
-      const diff = Math.abs(angle2 - angle1);
-      if (diff > 0.3) angleChanges++;
+      let diff = Math.abs(angle2 - angle1);
+      if (diff > Math.PI) diff = 2 * Math.PI - diff;
+      if (diff > 0.45) angleChanges++;
     }
     const jitterEntropy = Math.min(1.0, angleChanges / Math.max(1, activeMouse.length - 2));
 
     return {
-      velocityMean,
-      velocityStd,
-      accelerationMean,
-      curvatureIndex,
-      jitterEntropy,
+      velocityMean: Number(velocityMean.toFixed(1)),
+      velocityStd: Number(velocityStd.toFixed(1)),
+      accelerationMean: Number(accelerationMean.toFixed(1)),
+      curvatureIndex: Number(curvatureIndex.toFixed(2)),
+      jitterEntropy: Number(jitterEntropy.toFixed(2)),
       trajectoryLength: Math.round(pathLength)
     };
   }
 
   _extractClickFeatures(windowClicks = [], historyClicks = []) {
     const activeClicks = windowClicks.length > 0 ? windowClicks : historyClicks;
-    const durations = activeClicks.map(c => c.duration || 85);
+    const durations = activeClicks.map(c => c.duration || 85).filter(d => d >= 10 && d <= 600);
 
-    const clickDurationMean = durations.length > 0 ? this._mean(durations) : 85;
-    const clickDurationStd = durations.length > 1 ? this._std(durations, clickDurationMean) : 15;
+    const clickDurationMean = durations.length > 0 ? this._mean(durations) : 85.0;
+    const clickDurationStd = durations.length > 1 ? this._std(durations, clickDurationMean) : 15.0;
 
     return {
-      clickDurationMean,
-      clickDurationStd
+      clickDurationMean: Number(clickDurationMean.toFixed(1)),
+      clickDurationStd: Number(clickDurationStd.toFixed(1))
     };
   }
 

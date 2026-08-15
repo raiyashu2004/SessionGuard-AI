@@ -1,8 +1,8 @@
 /**
  * High-Performance Animated Trust Score Gauge (Canvas 60fps)
  * 
- * Renders circular glowing cybernetic arc with smooth interpolation,
- * multi-segment thresholds, and dynamic color shifts.
+ * Renders circular cybernetic luminescent arc with dynamic color gradients,
+ * spark particle heads, smooth spring physics, and graduation ticks.
  */
 
 export class TrustGaugeVisualizer {
@@ -10,9 +10,10 @@ export class TrustGaugeVisualizer {
     this.canvas = document.getElementById(canvasId);
     this.ctx = this.canvas ? this.canvas.getContext('2d') : null;
     
-    this.currentScore = 96.0;
-    this.targetScore = 96.0;
+    this.currentScore = 96.8;
+    this.targetScore = 96.8;
     this.animationId = null;
+    this.sparkleAngle = 0;
 
     if (this.canvas) {
       this._initCanvasResolution();
@@ -36,8 +37,9 @@ export class TrustGaugeVisualizer {
 
   startLoop() {
     const render = () => {
-      // Smooth interpolation
-      this.currentScore += (this.targetScore - this.currentScore) * 0.1;
+      // Smooth spring interpolation
+      this.currentScore += (this.targetScore - this.currentScore) * 0.12;
+      this.sparkleAngle += 0.04;
       this.draw();
       this.animationId = requestAnimationFrame(render);
     };
@@ -51,12 +53,12 @@ export class TrustGaugeVisualizer {
     const h = this.height;
     const cx = w / 2;
     const cy = h / 2;
-    const radius = w * 0.40;
+    const radius = w * 0.39;
 
     ctx.clearRect(0, 0, w, h);
 
     const startAngle = 0.75 * Math.PI; // 135 deg
-    const endAngle = 2.25 * Math.PI;   // 405 deg (270 deg sweep)
+    const endAngle = 2.25 * Math.PI;   // 405 deg (270 deg total sweep)
     const totalSweep = endAngle - startAngle;
 
     // 1. Background Arc Track
@@ -64,55 +66,79 @@ export class TrustGaugeVisualizer {
     ctx.arc(cx, cy, radius, startAngle, endAngle);
     ctx.lineWidth = 14;
     ctx.lineCap = 'round';
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
     ctx.stroke();
 
-    // 2. Active Score Progress Arc with Dynamic Color
-    const scorePct = Math.max(0.01, this.currentScore / 100);
+    // 2. Active Score Progress Arc
+    const scorePct = Math.max(0.01, Math.min(1.0, this.currentScore / 100));
     const scoreSweep = startAngle + (totalSweep * scorePct);
 
-    // Pick color based on score
-    let strokeColor = '#10b981'; // Emerald
-    let glowColor = 'rgba(16, 185, 129, 0.5)';
+    // Pick dynamic colors
+    let strokeColorStart = '#059669';
+    let strokeColorEnd = '#10b981';
+    let glowColor = 'rgba(16, 185, 129, 0.45)';
+
     if (this.currentScore < 50) {
-      strokeColor = '#ef4444'; // Crimson
-      glowColor = 'rgba(239, 68, 68, 0.6)';
+      strokeColorStart = '#b91c1c';
+      strokeColorEnd = '#ef4444';
+      glowColor = 'rgba(239, 68, 68, 0.65)';
     } else if (this.currentScore < 90) {
-      strokeColor = '#f59e0b'; // Amber
+      strokeColorStart = '#d97706';
+      strokeColorEnd = '#f59e0b';
       glowColor = 'rgba(245, 158, 11, 0.5)';
     }
 
+    // Create gradient
+    const grad = ctx.createLinearGradient(0, h, w, 0);
+    grad.addColorStop(0, strokeColorStart);
+    grad.addColorStop(1, strokeColorEnd);
+
     ctx.save();
     ctx.shadowColor = glowColor;
-    ctx.shadowBlur = 18;
+    ctx.shadowBlur = 20;
 
     ctx.beginPath();
     ctx.arc(cx, cy, radius, startAngle, scoreSweep);
     ctx.lineWidth = 14;
     ctx.lineCap = 'round';
-    ctx.strokeStyle = strokeColor;
+    ctx.strokeStyle = grad;
     ctx.stroke();
     ctx.restore();
 
-    // 3. Subtle Tick Markers at 50% and 90%
+    // 3. Glowing Head Sparkle Particle at the Arc Endpoint
+    const headX = cx + Math.cos(scoreSweep) * radius;
+    const headY = cy + Math.sin(scoreSweep) * radius;
+
+    ctx.save();
+    ctx.shadowColor = strokeColorEnd;
+    ctx.shadowBlur = 12;
+    ctx.beginPath();
+    ctx.arc(headX, headY, 5.5, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
+    ctx.restore();
+
+    // 4. Subtle Tick Markers at 50% (Warn) and 90% (Verified)
     const warnAngle = startAngle + (totalSweep * 0.50);
     const verifyAngle = startAngle + (totalSweep * 0.90);
 
-    this._drawTick(ctx, cx, cy, radius, warnAngle, '#f59e0b');
-    this._drawTick(ctx, cx, cy, radius, verifyAngle, '#10b981');
+    this._drawTick(ctx, cx, cy, radius, warnAngle, '#f59e0b', '50%');
+    this._drawTick(ctx, cx, cy, radius, verifyAngle, '#10b981', '90%');
 
-    // 4. Subtle Outer Breathing Ring
-    const pulseOffset = Math.sin(Date.now() * 0.003) * 2;
+    // 5. Outer Cybernetic Reticle Ring
+    const pulseOffset = Math.sin(Date.now() * 0.003) * 1.5;
     ctx.beginPath();
-    ctx.arc(cx, cy, radius + 14 + pulseOffset, startAngle, endAngle);
-    ctx.lineWidth = 1.5;
-    ctx.strokeStyle = this.currentScore < 50 ? 'rgba(239, 68, 68, 0.3)' : 'rgba(99, 102, 241, 0.15)';
+    ctx.arc(cx, cy, radius + 15 + pulseOffset, startAngle, endAngle);
+    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = this.currentScore < 50 ? 'rgba(239, 68, 68, 0.35)' : 'rgba(99, 102, 241, 0.18)';
+    ctx.setLineDash([4, 6]);
     ctx.stroke();
+    ctx.setLineDash([]);
   }
 
-  _drawTick(ctx, cx, cy, r, angle, color) {
-    const innerR = r - 12;
-    const outerR = r + 12;
+  _drawTick(ctx, cx, cy, r, angle, color, label) {
+    const innerR = r - 10;
+    const outerR = r + 10;
     const x1 = cx + Math.cos(angle) * innerR;
     const y1 = cy + Math.sin(angle) * innerR;
     const x2 = cx + Math.cos(angle) * outerR;
@@ -124,6 +150,15 @@ export class TrustGaugeVisualizer {
     ctx.lineWidth = 2;
     ctx.strokeStyle = color;
     ctx.stroke();
+
+    // Small label outside
+    const lx = cx + Math.cos(angle) * (outerR + 10);
+    const ly = cy + Math.sin(angle) * (outerR + 10);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+    ctx.font = '8px JetBrains Mono';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(label, lx, ly);
   }
 
   destroy() {

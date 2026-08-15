@@ -2,7 +2,7 @@
  * Anomaly Detection & Behavioral Model Engine
  * 
  * Implements Multi-dimensional Mahalanobis Distance & Isolation Forest Anomaly Scoring
- * against personalized behavioral baseline profiles.
+ * with online adaptive baseline updating and multi-vector threat simulation.
  */
 
 export class AnomalyDetectionModel {
@@ -13,13 +13,13 @@ export class AnomalyDetectionModel {
         type: 'Fast Rhythmic Typist',
         mu: {
           dwellMean: 72.0,
-          dwellStd: 12.0,
+          dwellStd: 14.0,
           flightMean: 88.0,
-          flightStd: 16.0,
+          flightStd: 18.0,
           velocityMean: 520.0,
           velocityStd: 110.0,
           curvatureIndex: 1.18,
-          jitterEntropy: 0.45,
+          jitterEntropy: 0.42,
           clickDurationMean: 70.0
         },
         weights: {
@@ -34,15 +34,15 @@ export class AnomalyDetectionModel {
         name: 'Dr. Sarah Lin (Analyst)',
         type: 'Deliberate & Precise',
         mu: {
-          dwellMean: 132.0,
-          dwellStd: 20.0,
-          flightMean: 175.0,
-          flightStd: 28.0,
-          velocityMean: 290.0,
+          dwellMean: 128.0,
+          dwellStd: 22.0,
+          flightMean: 168.0,
+          flightStd: 26.0,
+          velocityMean: 295.0,
           velocityStd: 65.0,
-          curvatureIndex: 1.45,
-          jitterEntropy: 0.72,
-          clickDurationMean: 115.0
+          curvatureIndex: 1.42,
+          jitterEntropy: 0.68,
+          clickDurationMean: 112.0
         },
         weights: {
           dwell: 0.28,
@@ -63,8 +63,8 @@ export class AnomalyDetectionModel {
           velocityMean: 410.0,
           velocityStd: 85.0,
           curvatureIndex: 1.28,
-          jitterEntropy: 0.58,
-          clickDurationMean: 88.0
+          jitterEntropy: 0.55,
+          clickDurationMean: 85.0
         },
         weights: {
           dwell: 0.28,
@@ -77,7 +77,8 @@ export class AnomalyDetectionModel {
     };
 
     this.activeProfileKey = 'custom_user';
-    this.syntheticAnomalyOverride = null; // Used for Attack Simulation
+    this.syntheticAnomalyOverride = null;
+    this.enableOnlineLearning = true;
   }
 
   getActiveProfile() {
@@ -92,18 +93,15 @@ export class AnomalyDetectionModel {
     return false;
   }
 
-  /**
-   * Fit or update custom user profile from calibrated enrollment data
-   */
   fitCustomBaseline(calibrationData) {
     const p = this.profiles.custom_user.mu;
 
     if (calibrationData.dwellMean) p.dwellMean = calibrationData.dwellMean;
-    if (calibrationData.dwellStd) p.dwellStd = Math.max(8, calibrationData.dwellStd);
+    if (calibrationData.dwellStd) p.dwellStd = Math.max(10, calibrationData.dwellStd);
     if (calibrationData.flightMean) p.flightMean = calibrationData.flightMean;
-    if (calibrationData.flightStd) p.flightStd = Math.max(10, calibrationData.flightStd);
+    if (calibrationData.flightStd) p.flightStd = Math.max(12, calibrationData.flightStd);
     if (calibrationData.velocityMean) p.velocityMean = calibrationData.velocityMean;
-    if (calibrationData.velocityStd) p.velocityStd = Math.max(30, calibrationData.velocityStd);
+    if (calibrationData.velocityStd) p.velocityStd = Math.max(35, calibrationData.velocityStd);
     if (calibrationData.curvatureIndex) p.curvatureIndex = calibrationData.curvatureIndex;
     if (calibrationData.clickDurationMean) p.clickDurationMean = calibrationData.clickDurationMean;
 
@@ -125,38 +123,38 @@ export class AnomalyDetectionModel {
 
     // 1. Keystroke Dwell Z-Score Distance
     const dwellDelta = Math.abs(liveFeatures.dwellMean - baseline.dwellMean);
-    const dwellZ = dwellDelta / (baseline.dwellStd || 15);
-    const dwellDivergence = Math.min(1.0, dwellZ / 3.2);
+    const dwellZ = dwellDelta / (baseline.dwellStd || 16);
+    const dwellDivergence = Math.min(1.0, Math.pow(dwellZ / 3.0, 1.2));
 
     // 2. Keystroke Flight Z-Score Distance
     const flightDelta = Math.abs(liveFeatures.flightMean - baseline.flightMean);
     const flightZ = flightDelta / (baseline.flightStd || 20);
-    const flightDivergence = Math.min(1.0, flightZ / 3.0);
+    const flightDivergence = Math.min(1.0, Math.pow(flightZ / 2.8, 1.2));
 
     // 3. Mouse Velocity Distance
     const velDelta = Math.abs(liveFeatures.velocityMean - baseline.velocityMean);
     const velZ = velDelta / (baseline.velocityStd || 80);
-    const velDivergence = Math.min(1.0, velZ / 3.5);
+    const velDivergence = Math.min(1.0, Math.pow(velZ / 3.2, 1.1));
 
     // 4. Curvature & Jitter Distance
     const curvDelta = Math.abs(liveFeatures.curvatureIndex - baseline.curvatureIndex);
-    const curvDivergence = Math.min(1.0, curvDelta / 0.9);
+    const curvDivergence = Math.min(1.0, Math.pow(curvDelta / 0.85, 1.1));
 
     // 5. Click Duration Distance
     const clickDelta = Math.abs(liveFeatures.clickDurationMean - baseline.clickDurationMean);
-    const clickDivergence = Math.min(1.0, clickDelta / 45);
+    const clickDivergence = Math.min(1.0, clickDelta / 40);
 
     // Composite Mahalanobis Distance squared
     const mahalanobisD2 = (
       Math.pow(dwellZ, 2) * weights.dwell +
       Math.pow(flightZ, 2) * weights.flight +
       Math.pow(velZ, 2) * weights.velocity +
-      Math.pow(curvDelta / 0.3, 2) * weights.curvature +
-      Math.pow(clickDelta / 20, 2) * weights.click
+      Math.pow(curvDelta / 0.28, 2) * weights.curvature +
+      Math.pow(clickDelta / 18, 2) * weights.click
     );
 
     // Composite Anomaly Score (0.0 to 1.0)
-    const compositeAnomaly = (
+    let compositeAnomaly = (
       dwellDivergence * weights.dwell +
       flightDivergence * weights.flight +
       velDivergence * weights.velocity +
@@ -164,15 +162,23 @@ export class AnomalyDetectionModel {
       clickDivergence * weights.click
     );
 
+    // Soft online learning: if anomaly is very low (normal legit usage), lightly adapt baseline
+    if (this.enableOnlineLearning && compositeAnomaly < 0.18 && this.activeProfileKey === 'custom_user') {
+      const alpha = 0.015;
+      baseline.dwellMean = (1 - alpha) * baseline.dwellMean + alpha * liveFeatures.dwellMean;
+      baseline.flightMean = (1 - alpha) * baseline.flightMean + alpha * liveFeatures.flightMean;
+      baseline.velocityMean = (1 - alpha) * baseline.velocityMean + alpha * liveFeatures.velocityMean;
+    }
+
     return {
-      compositeAnomaly: Math.min(1.0, Math.max(0.0, compositeAnomaly)),
+      compositeAnomaly: Math.min(1.0, Math.max(0.02, compositeAnomaly)),
       mahalanobisD2: Number(mahalanobisD2.toFixed(3)),
       featureDivergences: {
-        dwell: Math.round(dwellDivergence * 100),
-        flight: Math.round(flightDivergence * 100),
-        velocity: Math.round(velDivergence * 100),
-        curvature: Math.round(curvDivergence * 100),
-        click: Math.round(clickDivergence * 100)
+        dwell: Math.max(2, Math.round(dwellDivergence * 100)),
+        flight: Math.max(3, Math.round(flightDivergence * 100)),
+        velocity: Math.max(2, Math.round(velDivergence * 100)),
+        curvature: Math.max(4, Math.round(curvDivergence * 100)),
+        click: Math.max(1, Math.round(clickDivergence * 100))
       },
       telemetry: {
         dwellDelta: dwellDelta.toFixed(1),
@@ -192,25 +198,30 @@ export class AnomalyDetectionModel {
   }
 
   _generateSimulatedAnomaly(config) {
-    const isBot = config.type === 'bot';
-    const divergence = config.severity || 0.88;
-
-    return {
-      compositeAnomaly: divergence,
-      mahalanobisD2: isBot ? 14.8 : 8.65,
-      featureDivergences: {
-        dwell: isBot ? 92 : 78,
-        flight: isBot ? 96 : 84,
-        velocity: isBot ? 88 : 72,
-        curvature: isBot ? 94 : 82,
-        click: isBot ? 90 : 65
-      },
-      telemetry: {
-        dwellDelta: isBot ? "180.4" : "112.5",
-        flightDelta: isBot ? "245.0" : "190.2",
-        velocityDelta: isBot ? "620.0" : "380.0",
-        curvDelta: isBot ? "2.40" : "1.85"
-      }
-    };
+    const type = config.type || 'human_hijack';
+    
+    if (type === 'bot') {
+      return {
+        compositeAnomaly: 0.96,
+        mahalanobisD2: 15.42,
+        featureDivergences: { dwell: 94, flight: 98, velocity: 92, curvature: 96, click: 91 },
+        telemetry: { dwellDelta: "192.0", flightDelta: "260.0", velocityDelta: "680.0", curvDelta: "2.65" }
+      };
+    } else if (type === 'stuffer') {
+      return {
+        compositeAnomaly: 0.94,
+        mahalanobisD2: 12.85,
+        featureDivergences: { dwell: 98, flight: 95, velocity: 84, curvature: 89, click: 92 },
+        telemetry: { dwellDelta: "210.0", flightDelta: "285.0", velocityDelta: "540.0", curvDelta: "1.90" }
+      };
+    } else {
+      // Human Impersonator / Handoff
+      return {
+        compositeAnomaly: 0.88,
+        mahalanobisD2: 8.92,
+        featureDivergences: { dwell: 82, flight: 88, velocity: 76, curvature: 86, click: 68 },
+        telemetry: { dwellDelta: "118.5", flightDelta: "194.2", velocityDelta: "390.0", curvDelta: "1.82" }
+      };
+    }
   }
 }
