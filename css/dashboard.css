@@ -334,16 +334,16 @@
 }
 
 /* ==========================================================================
-   2-COLUMN VISUALIZER CANVAS GRID
+   3-COLUMN MULTI-CHANNEL VISUALIZER CANVAS GRID
    ========================================================================== */
-.engine-grid-2col {
+.engine-grid-3col {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
 }
 
-@media (max-width: 680px) {
-  .engine-grid-2col {
+@media (max-width: 900px) {
+  .engine-grid-3col {
     grid-template-columns: 1fr;
   }
 }

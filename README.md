@@ -5,7 +5,9 @@
 [![Browser AI](https://img.shields.io/badge/ML%20Engine-Multivariate%20Anomaly%20Detection-06b6d4.svg)](https://github.com/raiyashu2004/SessionGuard-AI)
 [![License](https://img.shields.io/badge/License-MIT-amber.svg)](LICENSE)
 
-> **The Pitch**: *"Passwords prove you knew a secret once. SessionGuard-AI continuously proves you're still you — using how you type, move, and click — and catches session hijacking in real time, not after the damage is done."*
+> **The Pitch**: *"Passwords prove you knew a secret once. SessionGuard-AI continuously proves you're still you — using how you type, move, click, and speak — and catches session hijacking in real time, not after the damage is done."*
+
+📋 **[Read the 1-Page Executive Summary & Judge Pitch Sheet →](1_PAGE_SUMMARY.md)**
 
 ---
 

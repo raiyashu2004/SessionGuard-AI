@@ -589,8 +589,8 @@
           </div>
         </div>
 
-        <!-- 2-Column Real-Time Visualizer Grid -->
-        <div class="engine-grid-2col">
+        <!-- Multi-Channel Real-Time Visualizer Grid -->
+        <div class="engine-grid-3col">
           
           <!-- Mouse Trajectory Canvas -->
           <div class="engine-card visualizer-card hud-glass-card">
@@ -599,7 +599,7 @@
               <span class="live-indicator"><span class="live-dot"></span> LIVE 60 FPS</span>
             </div>
             <div class="canvas-container">
-              <canvas id="mouseTrajectoryCanvas" width="320" height="180"></canvas>
+              <canvas id="mouseTrajectoryCanvas" width="260" height="130"></canvas>
             </div>
             <div class="canvas-footer-stats">
               <span>Entropy: <strong class="mono text-cyan" id="mouseEntropyVal">0.78</strong></span>
@@ -610,18 +610,35 @@
           <!-- Keystroke Histogram Canvas -->
           <div class="engine-card visualizer-card hud-glass-card">
             <div class="card-header-flex">
-              <h4>Dwell & Flight Time Histogram</h4>
+              <h4>Dwell & Flight Histogram</h4>
               <div class="canvas-legend">
                 <span class="legend-tag baseline-tag">Baseline</span>
                 <span class="legend-tag live-tag">Current</span>
               </div>
             </div>
             <div class="canvas-container">
-              <canvas id="keystrokeHistCanvas" width="320" height="180"></canvas>
+              <canvas id="keystrokeHistCanvas" width="260" height="130"></canvas>
             </div>
             <div class="canvas-footer-stats">
               <span>Samples: <strong class="mono text-cyan" id="histSampleCount">142</strong></span>
               <span>Mahalanobis D²: <strong class="mono text-emerald" id="histDistanceVal">0.38</strong></span>
+            </div>
+          </div>
+
+          <!-- Voice Cadence & Acoustic Dynamics Canvas -->
+          <div class="engine-card visualizer-card hud-glass-card">
+            <div class="card-header-flex">
+              <h4>Voice Cadence & Audio Spectrum</h4>
+              <button id="btnToggleVoiceMic" class="btn-text-xs text-cyan" title="Toggle live acoustic microphone stream">
+                🎙️ Mic Stream
+              </button>
+            </div>
+            <div class="canvas-container">
+              <canvas id="voiceSpectrumCanvas" width="260" height="130"></canvas>
+            </div>
+            <div class="canvas-footer-stats">
+              <span>Cadence: <strong class="mono text-cyan" id="voiceCadenceVal">95.4%</strong></span>
+              <span>Burst Rate: <strong class="mono text-emerald" id="voiceBurstVal">Matched</strong></span>
             </div>
           </div>
 

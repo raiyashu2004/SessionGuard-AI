@@ -13,6 +13,7 @@ import { RiskEngine, RISK_STATES } from './engine/riskEngine.js';
 import { TrustGaugeVisualizer } from './visualizers/trustGauge.js';
 import { MouseTrajectoryVisualizer } from './visualizers/mouseHeatmap.js';
 import { KeystrokeHistogramVisualizer } from './visualizers/keystrokeChart.js';
+import { VoiceSpectrumVisualizer } from './visualizers/voiceSpectrum.js';
 import { MockPortalController } from './portal/mockApp.js';
 import { StepUpAuthController } from './portal/stepUpAuth.js';
 import { AttackSimulator } from './simulation/attackSimulator.js';
@@ -30,6 +31,7 @@ class SessionGuardApp {
     this.gaugeVis = new TrustGaugeVisualizer('trustGaugeCanvas');
     this.mouseVis = new MouseTrajectoryVisualizer('mouseTrajectoryCanvas');
     this.keyHistVis = new KeystrokeHistogramVisualizer('keystrokeHistCanvas');
+    this.voiceVis = new VoiceSpectrumVisualizer('voiceSpectrumCanvas');
 
     // Controllers
     this.portal = new MockPortalController(this.riskEngine, (msg, type) => this.showToast(msg, type));
@@ -90,6 +92,25 @@ class SessionGuardApp {
           soundOn?.classList.add('hidden');
           soundOff?.classList.remove('hidden');
           this.showToast('Audio feedback muted', 'amber');
+        }
+      });
+    }
+
+    // Voice Microphone Stream Toggle
+    const btnToggleVoice = document.getElementById('btnToggleVoiceMic');
+    if (btnToggleVoice) {
+      btnToggleVoice.addEventListener('click', async () => {
+        const isStreaming = await this.voiceVis.toggleMicrophone();
+        if (isStreaming) {
+          btnToggleVoice.innerText = '⏹️ Stop Mic';
+          btnToggleVoice.classList.add('text-emerald');
+          btnToggleVoice.classList.remove('text-cyan');
+          this.showToast('Live acoustic voice cadence streaming enabled!', 'emerald');
+        } else {
+          btnToggleVoice.innerText = '🎙️ Mic Stream';
+          btnToggleVoice.classList.add('text-cyan');
+          btnToggleVoice.classList.remove('text-emerald');
+          this.showToast('Acoustic voice stream paused.', 'amber');
         }
       });
     }
