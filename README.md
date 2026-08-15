@@ -7,8 +7,6 @@
 
 > **The Pitch**: *"Passwords prove you knew a secret once. SessionGuard-AI continuously proves you're still you — using how you type, move, click, and speak — and catches session hijacking in real time, not after the damage is done."*
 
-📋 **[Read the 1-Page Executive Summary & Judge Pitch Sheet →](1_PAGE_SUMMARY.md)**
-
 ---
 
 ## 📌 Problem & Hackathon Hook
