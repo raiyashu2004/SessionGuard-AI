@@ -1,7 +1,7 @@
 /**
- * High-Performance Animated Trust Score Gauge (Canvas 60fps)
+ * Maximalist Quantum Trust Core Gauge (Canvas 60fps)
  * 
- * Renders circular cybernetic luminescent arc with dynamic color gradients,
+ * Renders multi-layered cybernetic reticle rings, glowing plasma arc,
  * spark particle heads, smooth spring physics, and graduation ticks.
  */
 
@@ -12,23 +12,31 @@ export class TrustGaugeVisualizer {
     
     this.currentScore = 96.8;
     this.targetScore = 96.8;
+    this.rotationAngle = 0;
     this.animationId = null;
-    this.sparkleAngle = 0;
 
     if (this.canvas) {
       this._initCanvasResolution();
       this.startLoop();
+
+      window.addEventListener('resize', () => {
+        this._initCanvasResolution();
+      }, { passive: true });
     }
   }
 
   _initCanvasResolution() {
-    const dpr = window.devicePixelRatio || 1;
-    const rect = this.canvas.getBoundingClientRect();
-    this.canvas.width = (rect.width || 280) * dpr;
-    this.canvas.height = (rect.height || 280) * dpr;
+    if (!this.canvas) return;
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const rect = this.canvas.parentElement.getBoundingClientRect();
+    const size = Math.min(rect.width, rect.height, 280);
+    
+    this.canvas.width = size * dpr;
+    this.canvas.height = size * dpr;
+    this.ctx.resetTransform?.() || this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.ctx.scale(dpr, dpr);
-    this.width = rect.width || 280;
-    this.height = rect.height || 280;
+    this.width = size;
+    this.height = size;
   }
 
   setScore(score) {
@@ -39,7 +47,7 @@ export class TrustGaugeVisualizer {
     const render = () => {
       // Smooth spring interpolation
       this.currentScore += (this.targetScore - this.currentScore) * 0.12;
-      this.sparkleAngle += 0.04;
+      this.rotationAngle += 0.008;
       this.draw();
       this.animationId = requestAnimationFrame(render);
     };
@@ -53,7 +61,7 @@ export class TrustGaugeVisualizer {
     const h = this.height;
     const cx = w / 2;
     const cy = h / 2;
-    const radius = w * 0.39;
+    const radius = w * 0.38;
 
     ctx.clearRect(0, 0, w, h);
 
@@ -61,41 +69,62 @@ export class TrustGaugeVisualizer {
     const endAngle = 2.25 * Math.PI;   // 405 deg (270 deg total sweep)
     const totalSweep = endAngle - startAngle;
 
-    // 1. Background Arc Track
+    // 1. Concentric Cyber Background Rings
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(this.rotationAngle);
+
+    // Outer slow-spinning segmented ring
+    ctx.beginPath();
+    ctx.arc(0, 0, radius + 18, 0, Math.PI * 2);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(6, 182, 212, 0.15)';
+    ctx.setLineDash([8, 12]);
+    ctx.stroke();
+
+    // Inner reverse-spinning segmented ring
+    ctx.beginPath();
+    ctx.arc(0, 0, radius - 18, 0, Math.PI * 2);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(99, 102, 241, 0.12)';
+    ctx.setLineDash([4, 8]);
+    ctx.stroke();
+    ctx.restore();
+
+    // 2. Base Arc Track
     ctx.beginPath();
     ctx.arc(cx, cy, radius, startAngle, endAngle);
     ctx.lineWidth = 14;
     ctx.lineCap = 'round';
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
     ctx.stroke();
 
-    // 2. Active Score Progress Arc
+    // 3. Dynamic Color State
     const scorePct = Math.max(0.01, Math.min(1.0, this.currentScore / 100));
     const scoreSweep = startAngle + (totalSweep * scorePct);
 
-    // Pick dynamic colors
     let strokeColorStart = '#059669';
     let strokeColorEnd = '#10b981';
-    let glowColor = 'rgba(16, 185, 129, 0.45)';
+    let glowColor = 'rgba(16, 185, 129, 0.5)';
 
     if (this.currentScore < 50) {
       strokeColorStart = '#b91c1c';
       strokeColorEnd = '#ef4444';
-      glowColor = 'rgba(239, 68, 68, 0.65)';
+      glowColor = 'rgba(239, 68, 68, 0.75)';
     } else if (this.currentScore < 90) {
       strokeColorStart = '#d97706';
       strokeColorEnd = '#f59e0b';
-      glowColor = 'rgba(245, 158, 11, 0.5)';
+      glowColor = 'rgba(245, 158, 11, 0.6)';
     }
 
-    // Create gradient
+    // Draw Glowing Plasma Progress Arc
     const grad = ctx.createLinearGradient(0, h, w, 0);
     grad.addColorStop(0, strokeColorStart);
     grad.addColorStop(1, strokeColorEnd);
 
     ctx.save();
     ctx.shadowColor = glowColor;
-    ctx.shadowBlur = 20;
+    ctx.shadowBlur = 22;
 
     ctx.beginPath();
     ctx.arc(cx, cy, radius, startAngle, scoreSweep);
@@ -105,35 +134,25 @@ export class TrustGaugeVisualizer {
     ctx.stroke();
     ctx.restore();
 
-    // 3. Glowing Head Sparkle Particle at the Arc Endpoint
+    // 4. Glowing Head Sparkle Particle
     const headX = cx + Math.cos(scoreSweep) * radius;
     const headY = cy + Math.sin(scoreSweep) * radius;
 
     ctx.save();
     ctx.shadowColor = strokeColorEnd;
-    ctx.shadowBlur = 12;
+    ctx.shadowBlur = 16;
     ctx.beginPath();
-    ctx.arc(headX, headY, 5.5, 0, Math.PI * 2);
+    ctx.arc(headX, headY, 6, 0, Math.PI * 2);
     ctx.fillStyle = '#ffffff';
     ctx.fill();
     ctx.restore();
 
-    // 4. Subtle Tick Markers at 50% (Warn) and 90% (Verified)
+    // 5. Tactical Graduation Ticks
     const warnAngle = startAngle + (totalSweep * 0.50);
     const verifyAngle = startAngle + (totalSweep * 0.90);
 
     this._drawTick(ctx, cx, cy, radius, warnAngle, '#f59e0b', '50%');
     this._drawTick(ctx, cx, cy, radius, verifyAngle, '#10b981', '90%');
-
-    // 5. Outer Cybernetic Reticle Ring
-    const pulseOffset = Math.sin(Date.now() * 0.003) * 1.5;
-    ctx.beginPath();
-    ctx.arc(cx, cy, radius + 15 + pulseOffset, startAngle, endAngle);
-    ctx.lineWidth = 1.2;
-    ctx.strokeStyle = this.currentScore < 50 ? 'rgba(239, 68, 68, 0.35)' : 'rgba(99, 102, 241, 0.18)';
-    ctx.setLineDash([4, 6]);
-    ctx.stroke();
-    ctx.setLineDash([]);
   }
 
   _drawTick(ctx, cx, cy, r, angle, color, label) {
@@ -151,10 +170,9 @@ export class TrustGaugeVisualizer {
     ctx.strokeStyle = color;
     ctx.stroke();
 
-    // Small label outside
     const lx = cx + Math.cos(angle) * (outerR + 10);
     const ly = cy + Math.sin(angle) * (outerR + 10);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
     ctx.font = '8px JetBrains Mono';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';

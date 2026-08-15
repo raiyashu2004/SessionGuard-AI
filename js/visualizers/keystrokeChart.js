@@ -19,17 +19,26 @@ export class KeystrokeHistogramVisualizer {
     if (this.canvas) {
       this._initCanvasResolution();
       this.startLoop();
+
+      window.addEventListener('resize', () => {
+        this._initCanvasResolution();
+      }, { passive: true });
     }
   }
 
   _initCanvasResolution() {
-    const dpr = window.devicePixelRatio || 1;
-    const rect = this.canvas.getBoundingClientRect();
-    this.canvas.width = (rect.width || 320) * dpr;
-    this.canvas.height = (rect.height || 180) * dpr;
+    if (!this.canvas) return;
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const rect = this.canvas.parentElement.getBoundingClientRect();
+    const w = rect.width || 320;
+    const h = rect.height || 140;
+
+    this.canvas.width = w * dpr;
+    this.canvas.height = h * dpr;
+    this.ctx.resetTransform?.() || this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.ctx.scale(dpr, dpr);
-    this.width = rect.width || 320;
-    this.height = rect.height || 180;
+    this.width = w;
+    this.height = h;
   }
 
   updateData(baselineProfile, liveDwells = []) {

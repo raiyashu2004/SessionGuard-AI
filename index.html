@@ -3,75 +3,113 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SessionGuard-AI — Real-Time Continuous Behavioral Biometric Zero-Trust Layer</title>
-  <meta name="description" content="Continuously prove identity and catch session hijacking in real time using keystroke dynamics, mouse kinematics, and behavioral anomaly detection.">
+  <title>SessionGuard-AI — Continuous Behavioral Biometric Zero-Trust Intelligence</title>
+  <meta name="description" content="Maximalist real-time behavioral biometric zero-trust platform. Continuously verifies identity and catches session hijacking via keystroke cadence and mouse kinematics.">
   
-  <!-- Modern Typography from Google Fonts -->
+  <!-- Typography from Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheets -->
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/dashboard.css">
   <link rel="stylesheet" href="css/portal.css">
 </head>
-<body class="theme-dark">
+<body class="theme-maximalist">
+  <div class="cyber-scanlines"></div>
+  <div class="ambient-glow ambient-glow-1"></div>
+  <div class="ambient-glow ambient-glow-2"></div>
+  <div class="ambient-glow ambient-glow-3"></div>
+
   <div id="app" class="app-wrapper">
-    <!-- Top Navigation & Global Header -->
+    
+    <!-- TOP CYBER TICKER HUD -->
+    <aside class="top-hud-ticker" aria-label="Security HUD Ticker">
+      <div class="ticker-content">
+        <span class="ticker-tag blink-live">● SOC LIVE MONITOR</span>
+        <span class="ticker-divider">|</span>
+        <span class="ticker-item"><span class="t-dim">SYSTEM:</span> <strong class="text-emerald">DEFENSE NOMINAL</strong></span>
+        <span class="ticker-divider">|</span>
+        <span class="ticker-item"><span class="t-dim">MODEL ENGINE:</span> <strong>MULTIVARIATE GAUSSIAN + ISOLATION FOREST</strong></span>
+        <span class="ticker-divider">|</span>
+        <span class="ticker-item"><span class="t-dim">TELEMETRY FREQ:</span> <strong class="text-cyan">60 FPS REAL-TIME</strong></span>
+        <span class="ticker-divider">|</span>
+        <span class="ticker-item"><span class="t-dim">ENTROPY BAND:</span> <strong class="mono text-indigo">H=0.742 BITS</strong></span>
+        <span class="ticker-divider">|</span>
+        <span class="ticker-item"><span class="t-dim">PRIVACY:</span> <strong class="text-emerald">ZERO RAW KEYLOGGING COMPLIANT</strong></span>
+        <span class="ticker-divider">|</span>
+        <span class="ticker-item"><span class="t-dim">HASH:</span> <code class="mono text-cyan">0x8F4A...9E21</code></span>
+        <span class="ticker-divider">|</span>
+        <span class="ticker-item"><span class="t-dim">ENCRYPTION:</span> <strong class="text-emerald">TLS 1.3 / AES-256-GCM</strong></span>
+      </div>
+    </aside>
+
+    <!-- TOP NAVIGATION COMMAND BAR -->
     <header class="top-nav">
       <div class="nav-left">
         <div class="brand-logo">
           <div class="logo-shield">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
               <path d="M9 12l2 2 4-4" class="logo-check"/>
             </svg>
             <div class="shield-pulse"></div>
+            <div class="shield-core"></div>
           </div>
           <div class="brand-text">
-            <span class="brand-title">SESSION<span class="brand-highlight">GUARD</span> <span class="brand-ai-badge">AI</span></span>
-            <span class="brand-tagline">Continuous Behavioral Zero-Trust</span>
+            <div class="brand-title-row">
+              <span class="brand-title">SESSION<span class="brand-highlight">GUARD</span></span>
+              <span class="brand-ai-badge">AI 2.0</span>
+              <span class="version-tag">ZERO-TRUST</span>
+            </div>
+            <span class="brand-tagline">Continuous Behavioral Biometrics & Motor Kinematics</span>
           </div>
         </div>
 
         <div class="system-status-badge" id="globalStatusBadge">
           <span class="status-dot"></span>
           <span class="status-label" id="globalStatusText">CONTINUOUS AUTH ACTIVE</span>
+          <span class="status-ping-hz mono">60Hz</span>
         </div>
       </div>
 
+      <!-- Center Controls: Baseline Selector & Policy Preset -->
       <div class="nav-center">
-        <div class="profile-selector-wrapper">
-          <label for="userProfileSelect" class="profile-label">BASELINE:</label>
-          <select id="userProfileSelect" class="profile-select">
-            <option value="alex_vance">Alex Vance (Dev Lead — Fast Typist)</option>
-            <option value="sarah_lin">Dr. Sarah Lin (Analyst — Precise)</option>
-            <option value="custom_user" selected>Live Calibrated Baseline (You)</option>
-          </select>
-        </div>
+        <div class="hud-pill-group">
+          <div class="profile-selector-wrapper">
+            <span class="hud-pill-icon">👤</span>
+            <label for="userProfileSelect" class="profile-label">BASELINE:</label>
+            <select id="userProfileSelect" class="profile-select">
+              <option value="alex_vance">Alex Vance (Dev Lead — Fast Typist)</option>
+              <option value="sarah_lin">Dr. Sarah Lin (Analyst — Deliberate)</option>
+              <option value="custom_user" selected>Personal Calibrated Baseline (You)</option>
+            </select>
+          </div>
 
-        <div class="profile-selector-wrapper policy-wrapper">
-          <label for="policySelect" class="profile-label">POLICY:</label>
-          <select id="policySelect" class="profile-select">
-            <option value="balanced" selected>Balanced (Standard Zero-Trust)</option>
-            <option value="strict">Strict (High-Compliance Banking)</option>
-            <option value="permissive">Permissive (Low-Friction)</option>
-          </select>
-        </div>
+          <div class="profile-selector-wrapper policy-wrapper">
+            <span class="hud-pill-icon">⚙️</span>
+            <label for="policySelect" class="profile-label">POLICY:</label>
+            <select id="policySelect" class="profile-select">
+              <option value="balanced" selected>Balanced (Standard)</option>
+              <option value="strict">Strict (High-Compliance)</option>
+              <option value="permissive">Permissive (Low-Friction)</option>
+            </select>
+          </div>
 
-        <button id="btnOpenEnrollment" class="btn btn-outline-primary btn-sm" title="Re-calibrate or customize your personal behavioral baseline">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          Enroll
-        </button>
+          <button id="btnOpenEnrollment" class="btn btn-hud-action btn-sm" title="Re-calibrate or customize your personal behavioral baseline">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Enroll Baseline</span>
+          </button>
+        </div>
       </div>
 
+      <!-- Right Demo & Threat Injections Suite -->
       <div class="nav-right">
-        <!-- Pitch/Demo Action Controls -->
         <div class="demo-controls-group">
           <button id="btnSimulateLegit" class="btn btn-demo-legit" title="Test normal legitimate user behavior">
             <span class="btn-icon">✓</span>
-            <span>Legit</span>
+            <span>Legit Mode</span>
           </button>
           
           <button id="btnSimulateHijack" class="btn btn-demo-hijack" title="Simulate an attacker taking over the keyboard and mouse">
@@ -92,67 +130,81 @@
 
         <div class="nav-aux">
           <button id="btnToggleSound" class="icon-btn" title="Toggle Audio Feedback" aria-label="Toggle Sound">
-            <svg id="soundIconOn" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-            <svg id="soundIconOff" class="hidden" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+            <svg id="soundIconOn" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            <svg id="soundIconOff" class="hidden" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
           </button>
           <button id="btnExportForensics" class="btn btn-glass btn-sm" title="Export Security & Threat Forensic Audit Log">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Audit Log
+            <span>Audit Log</span>
           </button>
         </div>
       </div>
     </header>
 
-    <!-- Main Workspace Split Grid -->
+    <!-- MAIN MAXIMALIST DUAL-CONSOLE SPLIT -->
     <main class="main-split-container">
       
-      <!-- LEFT PANE: Mock Protected Enterprise Portal (SessionGuard Vault) -->
+      <!-- LEFT CONSOLE: SessionGuard Enterprise Portal & Vault -->
       <section class="portal-pane" id="portalPane">
+        
+        <!-- Portal Subheader Header Bar -->
         <div class="portal-header">
           <div class="portal-brand">
-            <div class="portal-icon">🛡️</div>
+            <div class="portal-icon-hex">🛡️</div>
             <div>
-              <h2 class="portal-title">SessionGuard Prime Enterprise Cloud</h2>
-              <span class="portal-subtitle">High-Security Production Workspace & Banking Vault</span>
+              <div class="portal-title-row">
+                <h2 class="portal-title">SessionGuard Prime Enterprise Cloud</h2>
+                <span class="portal-env-tag">PRODUCTION-US-EAST</span>
+              </div>
+              <span class="portal-subtitle">Zero-Trust High-Security Asset Vault & Production Cluster</span>
             </div>
           </div>
-          <div class="session-meta">
-            <span class="meta-item"><span class="meta-label">Session ID:</span> <code id="sessionIdDisplay">SG-9482-TX</code></span>
-            <span class="meta-item"><span class="meta-label">Initial Auth:</span> Password + FIDO2 (08:42 AM)</span>
+          
+          <div class="session-meta-hud">
+            <div class="meta-row"><span class="meta-lbl">SESSION TOKEN:</span> <code class="mono" id="sessionIdDisplay">SG-9482-TX</code></div>
+            <div class="meta-row"><span class="meta-lbl">INITIAL GATE:</span> <span class="text-emerald">Password + FIDO2 (08:42:15 AM)</span></div>
+            <div class="meta-row"><span class="meta-lbl">ACTIVE ENCRYPTION:</span> <span class="text-cyan">AES-GCM-256 / SHA-512</span></div>
           </div>
         </div>
 
-        <!-- Portal Navigation Tabs -->
+        <!-- Navigation Tabs Ribbon -->
         <div class="portal-nav-tabs">
           <button class="tab-btn active" data-tab="wire-transfer">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            Wire Transfer ($50k+)
+            <span>Wire Transfer ($50k+)</span>
+            <span class="tab-badge">HIGH ASSET</span>
           </button>
           <button class="tab-btn" data-tab="api-vault">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            Production Secret Keys
+            <span>Production Secrets</span>
+            <span class="tab-badge">ROOT</span>
           </button>
           <button class="tab-btn" data-tab="db-admin">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-            Database Operations
+            <span>Cluster Ops</span>
+            <span class="tab-badge">6 NODES</span>
           </button>
           <button class="tab-btn" data-tab="audit-ledger">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-            Audit Trail
+            <span>Session Ledger</span>
+            <span class="tab-badge text-emerald">SYNCED</span>
           </button>
         </div>
 
         <!-- Portal Interactive Work Area -->
         <div class="portal-body">
           
-          <!-- Tab 1: Wire Transfer -->
+          <!-- TAB 1: WIRE TRANSFER -->
           <div class="tab-content active" id="tab-wire-transfer">
-            <div class="portal-card">
+            <div class="portal-card hud-glass-card">
               <div class="card-header">
-                <h3>Authorized Corporate Wire Transfer</h3>
-                <span class="badge badge-warning">High-Risk Asset Action</span>
+                <div class="card-title-group">
+                  <span class="card-kicker">FINANCIAL ASSET DISPATCH</span>
+                  <h3>Authorized Corporate Wire Settlement</h3>
+                </div>
+                <span class="badge badge-warning">Behavioral Verification Gated</span>
               </div>
-              <p class="card-desc">Execute multi-currency corporate payments. Protected by SessionGuard continuous behavioral verification.</p>
+              <p class="card-desc">Execute multi-currency corporate payments. Real-time motor kinematics verification prevents unauthorized transactions even during live session hijackings.</p>
               
               <form id="wireTransferForm" class="portal-form" onsubmit="return false;">
                 <div class="form-row">
@@ -161,8 +213,8 @@
                     <input type="text" id="wireRecipient" class="form-input" placeholder="e.g. Apex Global Cloud Solutions LLC" value="Apex Global Cloud Solutions LLC">
                   </div>
                   <div class="form-group flex-1">
-                    <label for="wireIban">Destination IBAN / Swift</label>
-                    <input type="text" id="wireIban" class="form-input mono" placeholder="CH93 0000 0000 8392 1029 4" value="US34 AEGS 9920 4820 1928 3">
+                    <label for="wireIban">Destination IBAN / Swift Routing</label>
+                    <input type="text" id="wireIban" class="form-input mono" placeholder="CH93 0000 0000 8392 1029 4" value="US34 SG99 9920 4820 1928 3">
                   </div>
                 </div>
 
@@ -171,30 +223,34 @@
                     <label for="wireAmount">Transfer Amount ($ USD)</label>
                     <div class="input-prefix-wrapper">
                       <span class="input-prefix">$</span>
-                      <input type="number" id="wireAmount" class="form-input mono" value="75000" min="1000" step="500">
+                      <input type="number" id="wireAmount" class="form-input mono font-bold" value="75000" min="1000" step="500">
                     </div>
                   </div>
                   <div class="form-group flex-1">
                     <label for="wireMemo">Payment Reference Memo</label>
-                    <input type="text" id="wireMemo" class="form-input" placeholder="Type a note here..." value="Q3 Enterprise Infrastructure Retainer">
+                    <input type="text" id="wireMemo" class="form-input" placeholder="Type memo notes..." value="Q3 Enterprise Infrastructure Retainer">
                   </div>
                 </div>
 
                 <div class="form-actions">
                   <button type="button" id="btnExecuteWire" class="btn btn-danger-action">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                    Authorize & Disburse $75,000
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    <span>Authorize & Disburse $75,000</span>
                   </button>
-                  <span class="action-security-note">
-                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    Action automatically aborted if Trust Score drops below 75%
-                  </span>
+                  <div class="action-security-note">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <span>Auto-aborts if Trust Score &lt; 75%</span>
+                  </div>
                 </div>
               </form>
             </div>
 
-            <div class="portal-card recent-transfers-card">
-              <h4>Recent Settlement Dispatches</h4>
+            <!-- Recent Settlement Dispatches Ledger Table -->
+            <div class="portal-card hud-glass-card recent-transfers-card">
+              <div class="card-header-sm">
+                <h4>Recent Settlement Dispatches & Verification Proofs</h4>
+                <span class="mono text-muted text-xs">Updated Real-Time</span>
+              </div>
               <div class="table-responsive">
                 <table class="portal-table">
                   <thead>
@@ -202,22 +258,22 @@
                       <th>Time</th>
                       <th>Recipient</th>
                       <th>Amount</th>
-                      <th>Status</th>
+                      <th>Settlement</th>
                       <th>Trust Score at Exec</th>
                     </tr>
                   </thead>
                   <tbody id="settlementTableBody">
                     <tr>
-                      <td>11:42 AM</td>
-                      <td>OctaCore Data Centers</td>
-                      <td class="mono font-bold">$120,000</td>
+                      <td>11:42:09 AM</td>
+                      <td>OctaCore Global Data Centers</td>
+                      <td class="mono font-bold text-cyan">$120,000</td>
                       <td><span class="badge badge-success">Settled</span></td>
                       <td><span class="mono text-emerald">96.8% (Verified)</span></td>
                     </tr>
                     <tr>
-                      <td>10:15 AM</td>
-                      <td>Stripe Billing Pipeline</td>
-                      <td class="mono font-bold">$44,500</td>
+                      <td>10:15:33 AM</td>
+                      <td>Stripe Live Billing Pipeline</td>
+                      <td class="mono font-bold text-cyan">$44,500</td>
                       <td><span class="badge badge-success">Settled</span></td>
                       <td><span class="mono text-emerald">94.2% (Verified)</span></td>
                     </tr>
@@ -227,19 +283,25 @@
             </div>
           </div>
 
-          <!-- Tab 2: Secret API Keys -->
+          <!-- TAB 2: SECRET KEYS -->
           <div class="tab-content" id="tab-api-vault">
-            <div class="portal-card">
+            <div class="portal-card hud-glass-card">
               <div class="card-header">
-                <h3>Production API Keys & Cloud Credentials</h3>
+                <div class="card-title-group">
+                  <span class="card-kicker">CREDENTIAL ENCLAVE</span>
+                  <h3>Production Secrets & Root Infrastructure Keys</h3>
+                </div>
                 <span class="badge badge-warning">Zero-Trust Protected</span>
               </div>
-              <p class="card-desc">Master keys have root level access to cloud production databases and payment gateways.</p>
+              <p class="card-desc">Master keys have unrestricted root access to multi-region cloud databases and production payment gateways.</p>
               
               <div class="secrets-list">
                 <div class="secret-item">
                   <div class="secret-info">
-                    <div class="secret-name">AWS_PRODUCTION_MASTER_SECRET</div>
+                    <div class="secret-name-row">
+                      <span class="secret-name">AWS_PRODUCTION_MASTER_SECRET</span>
+                      <span class="secret-tag">IAM ROOT</span>
+                    </div>
                     <div class="secret-val mono" id="secretAws">••••••••••••••••••••••••••••••••••••••••</div>
                   </div>
                   <button class="btn btn-sm btn-outline-light btn-reveal-secret" data-secret="aws">Reveal Key</button>
@@ -247,7 +309,10 @@
 
                 <div class="secret-item">
                   <div class="secret-info">
-                    <div class="secret-name">STRIPE_LIVE_RESTRICTED_KEY</div>
+                    <div class="secret-name-row">
+                      <span class="secret-name">STRIPE_LIVE_RESTRICTED_KEY</span>
+                      <span class="secret-tag">GATEWAY</span>
+                    </div>
                     <div class="secret-val mono" id="secretStripe">••••••••••••••••••••••••••••••••••••••••</div>
                   </div>
                   <button class="btn btn-sm btn-outline-light btn-reveal-secret" data-secret="stripe">Reveal Key</button>
@@ -255,7 +320,10 @@
 
                 <div class="secret-item">
                   <div class="secret-info">
-                    <div class="secret-name">KUBERNETES_CLUSTER_ADMIN_TOKEN</div>
+                    <div class="secret-name-row">
+                      <span class="secret-name">KUBERNETES_CLUSTER_ADMIN_TOKEN</span>
+                      <span class="secret-tag">K8S CLUSTER</span>
+                    </div>
                     <div class="secret-val mono" id="secretKube">••••••••••••••••••••••••••••••••••••••••</div>
                   </div>
                   <button class="btn btn-sm btn-outline-light btn-reveal-secret" data-secret="kube">Reveal Key</button>
@@ -264,21 +332,48 @@
             </div>
           </div>
 
-          <!-- Tab 3: Database Admin -->
+          <!-- TAB 3: CLUSTER OPS -->
           <div class="tab-content" id="tab-db-admin">
-            <div class="portal-card">
+            <div class="portal-card hud-glass-card">
               <div class="card-header">
-                <h3>Production Cluster Operations</h3>
-                <span class="badge badge-danger">Destructive Operations</span>
+                <div class="card-title-group">
+                  <span class="card-kicker">INFRASTRUCTURE HEALTH</span>
+                  <h3>Production Kubernetes Cluster Operations</h3>
+                </div>
+                <span class="badge badge-info">6 Nodes Active</span>
               </div>
-              <div class="db-ops-grid">
+              <div class="cluster-nodes-grid">
+                <div class="node-status-card">
+                  <div class="node-head">
+                    <span class="node-dot green"></span>
+                    <span class="node-name mono">us-east-prod-01</span>
+                  </div>
+                  <div class="node-metrics mono">CPU: 24% | MEM: 42% | 12ms</div>
+                </div>
+                <div class="node-status-card">
+                  <div class="node-head">
+                    <span class="node-dot green"></span>
+                    <span class="node-name mono">us-east-prod-02</span>
+                  </div>
+                  <div class="node-metrics mono">CPU: 31% | MEM: 58% | 14ms</div>
+                </div>
+                <div class="node-status-card">
+                  <div class="node-head">
+                    <span class="node-dot green"></span>
+                    <span class="node-name mono">eu-central-01</span>
+                  </div>
+                  <div class="node-metrics mono">CPU: 18% | MEM: 36% | 48ms</div>
+                </div>
+              </div>
+              
+              <div class="db-ops-grid mt-4">
                 <div class="db-op-box">
-                  <h4>Database Snapshot & Export</h4>
+                  <h4>Database Snapshot & Encrypted Export</h4>
                   <p>Dump full encrypted customer database schema.</p>
                   <button class="btn btn-primary btn-sm" id="btnDbExport">Generate Export</button>
                 </div>
                 <div class="db-op-box danger-box">
-                  <h4>Flush Session Redis Cache</h4>
+                  <h4>Flush Session Redis Cluster Cache</h4>
                   <p>Invalidate all global active user token stores.</p>
                   <button class="btn btn-danger-action btn-sm" id="btnDbFlush">Flush All Tokens</button>
                 </div>
@@ -286,12 +381,15 @@
             </div>
           </div>
 
-          <!-- Tab 4: Audit Ledger -->
+          <!-- TAB 4: SESSION LEDGER -->
           <div class="tab-content" id="tab-audit-ledger">
-            <div class="portal-card">
+            <div class="portal-card hud-glass-card">
               <div class="card-header">
-                <h3>Real-Time Session Audit Ledger</h3>
-                <span class="badge badge-info">Immutable Log</span>
+                <div class="card-title-group">
+                  <span class="card-kicker">IMMUTABLE PROOF</span>
+                  <h3>Cryptographic Session Audit Ledger</h3>
+                </div>
+                <span class="badge badge-success">Block #849,102</span>
               </div>
               <div class="audit-stream" id="portalAuditStream">
                 <!-- Dynamically populated -->
@@ -301,12 +399,12 @@
 
         </div>
 
-        <!-- Interactive Typing Playground Area (To give natural keyboard engagement) -->
+        <!-- Interactive Behavioral Playground Area -->
         <div class="portal-typing-sandbox">
           <div class="sandbox-header">
             <div class="sandbox-title-group">
               <span class="sandbox-title">⚡ Interactive Behavioral Input Zone</span>
-              <span class="sandbox-hint">Type naturally or click sample prompts to generate telemetry:</span>
+              <span class="sandbox-hint">Type naturally or click sample prompts to generate live motor telemetry:</span>
             </div>
             <div class="prompt-chips-group">
               <button class="prompt-chip" data-text="Authorizing secondary settlement dispatch for Q3 infrastructure compute resources across regional zones.">💳 Wire Release</button>
@@ -317,29 +415,29 @@
           <textarea id="telemetryPlaygroundInput" class="sandbox-textarea" placeholder="Type here naturally (e.g. 'Deploying release candidate v3.4 to production cluster after security review'). Notice how your dwell time, flight interval, and typing rhythm are continuously profiled in real-time..."></textarea>
         </div>
 
-        <!-- LOCKDOWN OVERLAY (Appears when Trust Score is in Critical zone) -->
+        <!-- LOCKDOWN OVERLAY (CRITICAL ALERT STATE) -->
         <div class="portal-lockdown-overlay" id="portalLockdownOverlay">
           <div class="lockdown-modal">
             <div class="lockdown-icon-pulse">
-              <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <svg viewBox="0 0 24 24" width="54" height="54" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             </div>
             <h2 class="lockdown-title">SESSION ACCESS SUSPENDED</h2>
             <div class="lockdown-score-badge">
-              <span>Current Trust Score:</span>
+              <span>Identity Trust Score:</span>
               <strong id="lockdownScoreDisplay" class="mono text-danger">18.4%</strong>
             </div>
             <p class="lockdown-message">
-              <strong>Anomalous motor signature detected.</strong> Your continuous keystroke cadence and mouse trajectory deviate drastically from the authorized user baseline.
+              <strong>Critical motor anomaly detected.</strong> Continuous keystroke cadence, key-flight timing, and cursor trajectories diverge drastically from the authorized baseline.
             </p>
             <div class="lockdown-anomaly-reasons" id="lockdownAnomalyReasons">
               <div class="reason-chip">⚠️ Mouse Curvature Divergence: <strong>+312%</strong></div>
               <div class="reason-chip">⚠️ Keystroke Flight Time Drift: <strong>+240%</strong></div>
-              <div class="reason-chip">⚠️ Micro-Jitter Inconsistency: <strong>High</strong></div>
+              <div class="reason-chip">⚠️ Neuromuscular Micro-Jitter: <strong>Abnormal</strong></div>
             </div>
             <div class="lockdown-actions">
               <button id="btnTriggerStepUpAuth" class="btn btn-primary btn-lg">
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                Authenticate via Step-Up 2FA / Biometric
+                <span>Authenticate via Step-Up 2FA / Biometric</span>
               </button>
               <button id="btnDismissLockDemo" class="btn btn-outline-light btn-sm">
                 Reset Demo to Legit Mode
@@ -350,18 +448,18 @@
 
       </section>
 
-      <!-- RIGHT PANE: SessionGuard Engine Live Command Center & Telemetry Analytics -->
+      <!-- RIGHT CONSOLE: SessionGuard Live Telemetry Command Center -->
       <section class="engine-pane" id="enginePane">
         
         <!-- Live Trust Score Gauge Hero Section -->
-        <div class="engine-card trust-gauge-hero">
+        <div class="engine-card trust-gauge-hero hud-glass-card">
           <div class="gauge-header">
             <div class="gauge-title-wrap">
               <span class="engine-badge">REAL-TIME RISK ENGINE</span>
               <h3 class="engine-title">Continuous Identity Trust Score</h3>
             </div>
             <div class="confidence-indicator" id="confidenceIndicator">
-              <span class="confidence-label">Model Confidence:</span>
+              <span class="confidence-label">Confidence:</span>
               <span class="confidence-val mono" id="modelConfidenceVal">99.4%</span>
             </div>
           </div>
@@ -371,7 +469,7 @@
             <div class="gauge-canvas-wrapper">
               <canvas id="trustGaugeCanvas" width="280" height="280"></canvas>
               <div class="gauge-center-content">
-                <span class="gauge-score-number mono" id="trustScoreVal">96</span>
+                <span class="gauge-score-number mono" id="trustScoreVal">96.8</span>
                 <span class="gauge-score-unit">/ 100</span>
                 <span class="gauge-status-label" id="trustStatusLabel">IDENTITY VERIFIED</span>
               </div>
@@ -403,36 +501,39 @@
             </div>
           </div>
 
-          <!-- Quick Telemetry Tickers -->
+          <!-- Quick Telemetry Tickers HUD -->
           <div class="telemetry-tickers-grid">
             <div class="ticker-box">
               <span class="ticker-label">DWELL TIME (μ)</span>
-              <span class="ticker-val mono" id="tickerDwell">98 ms</span>
-              <span class="ticker-sub mono text-emerald" id="tickerDwellDelta">Δ +2.1%</span>
+              <span class="ticker-val mono" id="tickerDwell">95.0 ms</span>
+              <span class="ticker-sub mono text-emerald" id="tickerDwellDelta">Δ +1.8%</span>
             </div>
             <div class="ticker-box">
               <span class="ticker-label">FLIGHT INTERVAL (μ)</span>
-              <span class="ticker-val mono" id="tickerFlight">112 ms</span>
-              <span class="ticker-sub mono text-emerald" id="tickerFlightDelta">Δ +1.4%</span>
+              <span class="ticker-val mono" id="tickerFlight">112.0 ms</span>
+              <span class="ticker-sub mono text-emerald" id="tickerFlightDelta">Δ +1.2%</span>
             </div>
             <div class="ticker-box">
               <span class="ticker-label">CURSOR VELOCITY (μ)</span>
-              <span class="ticker-val mono" id="tickerVelocity">420 px/s</span>
+              <span class="ticker-val mono" id="tickerVelocity">410 px/s</span>
               <span class="ticker-sub mono text-emerald" id="tickerVelocityDelta">Normal</span>
             </div>
             <div class="ticker-box">
               <span class="ticker-label">PATH CURVATURE</span>
-              <span class="ticker-val mono" id="tickerCurvature">1.34</span>
+              <span class="ticker-val mono" id="tickerCurvature">1.28</span>
               <span class="ticker-sub mono text-emerald" id="tickerCurvatureDelta">Matched</span>
             </div>
           </div>
         </div>
 
         <!-- Biometric Anomaly Radar / Feature Breakdown -->
-        <div class="engine-card">
+        <div class="engine-card hud-glass-card">
           <div class="card-header-flex">
-            <h4>Behavioral Vector Divergence</h4>
-            <span class="window-timer-badge">Window: <strong id="windowTimerDisplay" class="mono">2.0s</strong></span>
+            <div class="card-title-group">
+              <span class="card-kicker">MULTI-VARIATE RESIDUALS</span>
+              <h4>Behavioral Vector Divergence</h4>
+            </div>
+            <span class="window-timer-badge">Window: <strong id="windowTimerDisplay" class="mono">1.8s</strong></span>
           </div>
           
           <div class="feature-anomaly-bars">
@@ -449,50 +550,50 @@
             <div class="feature-bar-group">
               <div class="feature-bar-label">
                 <span>Flight Time Cadence (Key-to-Key Flight)</span>
-                <span class="mono feature-val-tag text-emerald" id="barValFlight">6% Divergence</span>
+                <span class="mono feature-val-tag text-emerald" id="barValFlight">5% Divergence</span>
               </div>
               <div class="progress-track">
-                <div class="progress-fill progress-emerald" id="barFillFlight" style="width: 6%;"></div>
+                <div class="progress-fill progress-emerald" id="barFillFlight" style="width: 5%;"></div>
               </div>
             </div>
 
             <div class="feature-bar-group">
               <div class="feature-bar-label">
                 <span>Mouse Kinematics & Velocity Profile</span>
-                <span class="mono feature-val-tag text-emerald" id="barValVelocity">5% Divergence</span>
+                <span class="mono feature-val-tag text-emerald" id="barValVelocity">3% Divergence</span>
               </div>
               <div class="progress-track">
-                <div class="progress-fill progress-emerald" id="barFillVelocity" style="width: 5%;"></div>
+                <div class="progress-fill progress-emerald" id="barFillVelocity" style="width: 3%;"></div>
               </div>
             </div>
 
             <div class="feature-bar-group">
               <div class="feature-bar-label">
                 <span>Trajectory Curvature & Neuromuscular Jitter</span>
-                <span class="mono feature-val-tag text-emerald" id="barValCurvature">8% Divergence</span>
+                <span class="mono feature-val-tag text-emerald" id="barValCurvature">6% Divergence</span>
               </div>
               <div class="progress-track">
-                <div class="progress-fill progress-emerald" id="barFillCurvature" style="width: 8%;"></div>
+                <div class="progress-fill progress-emerald" id="barFillCurvature" style="width: 6%;"></div>
               </div>
             </div>
 
             <div class="feature-bar-group">
               <div class="feature-bar-label">
                 <span>Click Timing & Micro-Pause Rhythm</span>
-                <span class="mono feature-val-tag text-emerald" id="barValClick">3% Divergence</span>
+                <span class="mono feature-val-tag text-emerald" id="barValClick">2% Divergence</span>
               </div>
               <div class="progress-track">
-                <div class="progress-fill progress-emerald" id="barFillClick" style="width: 3%;"></div>
+                <div class="progress-fill progress-emerald" id="barFillClick" style="width: 2%;"></div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Live Visualizers: Mouse Kinematics & Keystroke Distribution -->
+        <!-- 2-Column Real-Time Visualizer Grid -->
         <div class="engine-grid-2col">
           
           <!-- Mouse Trajectory Canvas -->
-          <div class="engine-card visualizer-card">
+          <div class="engine-card visualizer-card hud-glass-card">
             <div class="card-header-flex">
               <h4>Live Cursor Trajectory Physics</h4>
               <span class="live-indicator"><span class="live-dot"></span> LIVE 60 FPS</span>
@@ -501,13 +602,13 @@
               <canvas id="mouseTrajectoryCanvas" width="320" height="180"></canvas>
             </div>
             <div class="canvas-footer-stats">
-              <span>Entropy: <strong class="mono" id="mouseEntropyVal">0.78</strong></span>
-              <span>Jitter: <strong class="mono" id="mouseJitterVal">Low</strong></span>
+              <span>Entropy: <strong class="mono text-cyan" id="mouseEntropyVal">0.78</strong></span>
+              <span>Jitter: <strong class="mono text-emerald" id="mouseJitterVal">Normal</strong></span>
             </div>
           </div>
 
           <!-- Keystroke Histogram Canvas -->
-          <div class="engine-card visualizer-card">
+          <div class="engine-card visualizer-card hud-glass-card">
             <div class="card-header-flex">
               <h4>Dwell & Flight Time Histogram</h4>
               <div class="canvas-legend">
@@ -519,17 +620,20 @@
               <canvas id="keystrokeHistCanvas" width="320" height="180"></canvas>
             </div>
             <div class="canvas-footer-stats">
-              <span>Sample Count: <strong class="mono" id="histSampleCount">142</strong></span>
-              <span>Mahalanobis D²: <strong class="mono" id="histDistanceVal">0.42</strong></span>
+              <span>Samples: <strong class="mono text-cyan" id="histSampleCount">142</strong></span>
+              <span>Mahalanobis D²: <strong class="mono text-emerald" id="histDistanceVal">0.38</strong></span>
             </div>
           </div>
 
         </div>
 
         <!-- Real-Time Anomaly & Scoring Stream -->
-        <div class="engine-card telemetry-stream-card">
+        <div class="engine-card telemetry-stream-card hud-glass-card">
           <div class="card-header-flex">
-            <h4>Live Risk & Behavioral Telemetry Stream</h4>
+            <div class="card-title-group">
+              <span class="card-kicker">SOC EVENT STREAM</span>
+              <h4>Live Security & Behavioral Telemetry Stream</h4>
+            </div>
             <button id="btnClearTelemetryLog" class="btn-text-xs">Clear Stream</button>
           </div>
           <div class="telemetry-log-stream" id="telemetryLogStream">
@@ -574,8 +678,8 @@
             <textarea id="enrollTypingInput" class="enroll-input" placeholder="Start typing the phrase above here..."></textarea>
             
             <div class="enroll-live-stats">
-              <span>Keystrokes captured: <strong class="mono" id="enrollKeysCaptured">0 / 80</strong></span>
-              <span>Speed: <strong class="mono" id="enrollWpm">0 WPM</strong></span>
+              <span>Keystrokes captured: <strong class="mono text-cyan" id="enrollKeysCaptured">0 / 80</strong></span>
+              <span>Speed: <strong class="mono text-emerald" id="enrollWpm">0 WPM</strong></span>
             </div>
 
             <div class="wizard-footer-actions">
@@ -595,8 +699,8 @@
             </div>
 
             <div class="enroll-live-stats">
-              <span>Targets Cleared: <strong class="mono" id="arenaTargetsCleared">0 / 6</strong></span>
-              <span>Trajectory Vectors: <strong class="mono" id="arenaVectorsCount">0</strong></span>
+              <span>Targets Cleared: <strong class="mono text-cyan" id="arenaTargetsCleared">0 / 6</strong></span>
+              <span>Trajectory Vectors: <strong class="mono text-emerald" id="arenaVectorsCount">0</strong></span>
             </div>
 
             <div class="wizard-footer-actions">

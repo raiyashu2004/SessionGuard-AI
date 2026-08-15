@@ -16,23 +16,31 @@ export class MouseTrajectoryVisualizer {
     if (this.canvas) {
       this._initCanvasResolution();
       this.startLoop();
+
+      window.addEventListener('resize', () => {
+        this._initCanvasResolution();
+      }, { passive: true });
     }
   }
 
   _initCanvasResolution() {
-    const dpr = window.devicePixelRatio || 1;
-    const rect = this.canvas.getBoundingClientRect();
-    this.canvas.width = (rect.width || 320) * dpr;
-    this.canvas.height = (rect.height || 180) * dpr;
+    if (!this.canvas) return;
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const rect = this.canvas.parentElement.getBoundingClientRect();
+    const w = rect.width || 320;
+    const h = rect.height || 140;
+
+    this.canvas.width = w * dpr;
+    this.canvas.height = h * dpr;
+    this.ctx.resetTransform?.() || this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.ctx.scale(dpr, dpr);
-    this.width = rect.width || 320;
-    this.height = rect.height || 180;
+    this.width = w;
+    this.height = h;
   }
 
   addPoint(x, y, speed = 300) {
     if (!this.canvas) return;
     
-    // Normalize coordinates to canvas viewbox
     const normX = ((x % window.innerWidth) / window.innerWidth) * (this.width - 24) + 12;
     const normY = ((y % window.innerHeight) / window.innerHeight) * (this.height - 24) + 12;
 
@@ -76,11 +84,11 @@ export class MouseTrajectoryVisualizer {
     const h = this.height;
 
     // Motion trail fade
-    ctx.fillStyle = 'rgba(8, 12, 20, 0.22)';
+    ctx.fillStyle = 'rgba(5, 8, 16, 0.22)';
     ctx.fillRect(0, 0, w, h);
 
     // Subtle Grid Lines
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.025)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
     ctx.lineWidth = 1;
     for (let x = 0; x < w; x += 25) {
       ctx.beginPath();
