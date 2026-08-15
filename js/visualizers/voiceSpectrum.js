@@ -50,50 +50,50 @@ export class VoiceSpectrumVisualizer {
       this.stopMicrophone();
       return false;
     } else {
-      return await this.startMicrophone();
+      return this.startMicrophone();
     }
   }
 
-  async startMicrophone() {
-    try {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        this.isListening = true;
-        return true;
-      }
+  startMicrophone() {
+    this.isListening = true;
 
-      // Safe race timeout in case browser does not grant or prompt mic in automated environments
-      const getStreamWithTimeout = () => Promise.race([
-        navigator.mediaDevices.getUserMedia({ audio: true, video: false }),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Mic timeout/bypassed')), 400))
-      ]);
+    // Asynchronously attempt to connect real microphone if allowed without blocking UI
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+        .then(stream => {
+          if (!this.isListening) {
+            stream.getTracks().forEach(t => t.stop());
+            return;
+          }
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          this.audioCtx = new AudioContext();
+          this.analyser = this.audioCtx.createAnalyser();
+          this.analyser.fftSize = 64;
+          this.analyser.smoothingTimeConstant = 0.8;
 
-      const stream = await getStreamWithTimeout();
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      this.audioCtx = new AudioContext();
-      this.analyser = this.audioCtx.createAnalyser();
-      this.analyser.fftSize = 64;
-      this.analyser.smoothingTimeConstant = 0.8;
+          this.microphone = this.audioCtx.createMediaStreamSource(stream);
+          this.microphone.connect(this.analyser);
 
-      this.microphone = this.audioCtx.createMediaStreamSource(stream);
-      this.microphone.connect(this.analyser);
-
-      const bufferLength = this.analyser.frequencyBinCount;
-      this.dataArray = new Uint8Array(bufferLength);
-      this.isListening = true;
-      return true;
-    } catch (err) {
-      console.info('Voice cadence switched to procedural acoustic mode:', err.message);
-      this.isListening = true;
-      return true;
+          const bufferLength = this.analyser.frequencyBinCount;
+          this.dataArray = new Uint8Array(bufferLength);
+        })
+        .catch(err => {
+          console.info('Using procedural acoustic stream:', err.message);
+        });
     }
+
+    return true;
   }
 
   stopMicrophone() {
+    this.isListening = false;
     if (this.audioCtx) {
       this.audioCtx.close().catch(() => {});
       this.audioCtx = null;
     }
-    this.isListening = false;
+    this.analyser = null;
+    this.microphone = null;
+    this.dataArray = null;
   }
 
   startLoop() {
