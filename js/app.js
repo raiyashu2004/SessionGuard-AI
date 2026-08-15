@@ -268,21 +268,14 @@ class SessionGuardApp {
     const fillElem = document.getElementById(`barFill${key}`);
     const valElem = document.getElementById(`barVal${key}`);
 
-    if (fillElem && valElem) {
-      fillElem.style.width = `${Math.min(100, percentage)}%`;
-      valElem.innerText = `${percentage}% Divergence`;
+    if (valElem) {
+      valElem.innerText = `${percentage}% Drift`;
+      valElem.className = 'm-sub mono ' + (percentage < 30 ? 'text-emerald' : (percentage < 65 ? 'text-warning' : 'text-danger'));
+    }
 
-      fillElem.className = 'progress-fill';
-      if (percentage < 30) {
-        fillElem.classList.add('progress-emerald');
-        valElem.className = 'mono feature-val-tag text-emerald';
-      } else if (percentage < 65) {
-        fillElem.classList.add('progress-amber');
-        valElem.className = 'mono feature-val-tag text-warning';
-      } else {
-        fillElem.classList.add('progress-crimson');
-        valElem.className = 'mono feature-val-tag text-danger';
-      }
+    if (fillElem) {
+      fillElem.style.width = `${Math.min(100, percentage)}%`;
+      fillElem.className = 'progress-fill ' + (percentage < 30 ? 'progress-emerald' : (percentage < 65 ? 'progress-amber' : 'progress-crimson'));
     }
   }
 

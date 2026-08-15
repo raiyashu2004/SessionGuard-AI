@@ -1,118 +1,36 @@
 /* ==========================================================================
-   SESSIONGUARD-AI — COMMAND CENTER & TELEMETRY DASHBOARD (dashboard.css)
+   SESSIONGUARD-AI — CLEAN DEFENSE DASHBOARD (dashboard.css)
    ========================================================================== */
 
-.engine-card {
-  padding: 1.25rem 1.4rem;
-}
-
-.card-header-flex {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.95rem;
-}
-
-.card-title-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-}
-
-.card-kicker {
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  font-weight: 700;
-  color: var(--color-cyan);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.card-header-flex h4 {
-  font-family: var(--font-display);
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  letter-spacing: 0.02em;
-}
-
-/* ==========================================================================
-   TRUST GAUGE HERO SECTION (QUANTUM TRUST CORE)
-   ========================================================================== */
-.trust-gauge-hero {
-  border: 1px solid rgba(6, 182, 212, 0.35);
-  background: linear-gradient(180deg, rgba(16, 26, 50, 0.92) 0%, rgba(10, 16, 32, 0.85) 100%);
-  box-shadow: 0 0 25px rgba(6, 182, 212, 0.15), var(--shadow-hud);
-}
-
-.gauge-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 0.85rem;
-}
-
-.gauge-title-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.engine-badge {
-  font-family: var(--font-mono);
-  font-size: 0.64rem;
-  font-weight: 800;
-  color: var(--color-cyan);
-  letter-spacing: 0.08em;
-}
-
-.engine-title {
-  font-family: var(--font-display);
-  font-size: 1.18rem;
-  font-weight: 800;
-  color: #fff;
-}
-
-.confidence-indicator {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.25rem 0.75rem;
-  background: rgba(6, 182, 212, 0.08);
-  border: 1px solid rgba(6, 182, 212, 0.3);
-  border-radius: var(--radius-full);
+.confidence-tag {
   font-size: 0.72rem;
-}
-
-.confidence-label {
   color: var(--text-muted);
-  font-weight: 600;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
 }
 
-.confidence-val {
-  color: var(--color-cyan-bright);
-  font-weight: 700;
+.confidence-tag strong {
+  color: var(--color-cyan);
 }
 
-/* Gauge Display Box */
-.gauge-display-container {
+/* Hero Gauge Card */
+.trust-hero-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-around;
-  padding: 0.5rem 0 1.25rem;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
-@media (max-width: 600px) {
-  .gauge-display-container {
-    flex-direction: column;
-  }
-}
-
-.gauge-canvas-wrapper {
+.gauge-center-wrap {
   position: relative;
-  width: 240px;
-  height: 240px;
+  width: 220px;
+  height: 220px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -126,7 +44,7 @@
   height: 100%;
 }
 
-.gauge-center-content {
+.gauge-digits {
   position: relative;
   z-index: 2;
   display: flex;
@@ -136,380 +54,211 @@
   text-align: center;
 }
 
-.gauge-score-number {
+.gauge-number {
   font-family: var(--font-display);
-  font-size: 3.5rem;
+  font-size: 3.2rem;
   font-weight: 800;
   line-height: 1;
   color: var(--color-emerald);
-  text-shadow: 0 0 24px var(--color-emerald-glow);
-  transition: all var(--transition-normal);
+  text-shadow: 0 0 20px var(--color-emerald-glow);
 }
 
-.gauge-score-unit {
-  font-size: 0.78rem;
+.gauge-max {
+  font-size: 0.75rem;
   color: var(--text-muted);
   font-weight: 600;
-  margin-top: 0.2rem;
+  margin-top: 0.15rem;
 }
 
-.gauge-status-label {
+.gauge-pill {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: var(--color-emerald);
-  margin-top: 0.5rem;
-  padding: 0.22rem 0.75rem;
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(16, 185, 129, 0.35);
-  border-radius: var(--radius-full);
-  box-shadow: 0 0 12px var(--color-emerald-glow);
-  transition: all var(--transition-normal);
-}
-
-/* Legend */
-.gauge-legend {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  max-width: 240px;
-}
-
-.legend-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.65rem;
-}
-
-.legend-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  margin-top: 0.3rem;
-  flex-shrink: 0;
-}
-
-.legend-dot.green {
-  background: var(--color-emerald);
-  box-shadow: 0 0 10px var(--color-emerald-glow);
-}
-
-.legend-dot.yellow {
-  background: var(--color-amber);
-  box-shadow: 0 0 10px var(--color-amber-glow);
-}
-
-.legend-dot.red {
-  background: var(--color-crimson);
-  box-shadow: 0 0 12px var(--color-crimson-glow);
-}
-
-.legend-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.legend-title {
-  font-size: 0.78rem;
+  font-size: 0.65rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--color-emerald);
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-full);
+  margin-top: 0.4rem;
+  letter-spacing: 0.05em;
 }
 
-.legend-desc {
-  font-size: 0.68rem;
-  color: var(--text-muted);
-  line-height: 1.35;
-}
-
-/* Telemetry Tickers Grid */
-.telemetry-tickers-grid {
+/* 3 Metrics Row */
+.metrics-row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.75rem;
+  width: 100%;
   border-top: 1px solid var(--border-subtle);
-  padding-top: 1rem;
+  padding-top: 1.15rem;
 }
 
-@media (max-width: 768px) {
-  .telemetry-tickers-grid {
-    grid-template-columns: repeat(2, 1fr);
+@media (max-width: 600px) {
+  .metrics-row {
+    grid-template-columns: 1fr;
   }
 }
 
-.ticker-box {
-  background: rgba(7, 11, 22, 0.65);
+.metric-card {
+  background: rgba(0, 0, 0, 0.3);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 0.65rem 0.85rem;
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
 }
 
-.ticker-label {
+.m-label {
   font-family: var(--font-mono);
   font-size: 0.62rem;
   font-weight: 700;
   color: var(--text-muted);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
 }
 
-.ticker-val {
+.m-val {
   font-size: 1.05rem;
-  font-weight: 800;
+  font-weight: 700;
   color: #fff;
 }
 
-.ticker-sub {
+.m-sub {
   font-size: 0.68rem;
   font-family: var(--font-mono);
 }
 
-/* ==========================================================================
-   FEATURE ANOMALY PROGRESS BARS
-   ========================================================================== */
-.window-timer-badge {
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.04);
-  padding: 0.2rem 0.65rem;
-  border-radius: var(--radius-sm);
+/* Motion Canvas Cards */
+.motion-card {
+  background: var(--bg-card);
   border: 1px solid var(--border-subtle);
-}
-
-.feature-anomaly-bars {
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.35rem;
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 0.75rem;
 }
 
-.feature-bar-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.feature-bar-label {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-}
-
-.feature-val-tag {
-  font-size: 0.74rem;
-  font-weight: 700;
-}
-
-.progress-track {
-  width: 100%;
-  height: 7px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: var(--radius-full);
-  overflow: hidden;
-  position: relative;
-}
-
-.progress-fill {
-  height: 100%;
-  border-radius: var(--radius-full);
-  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease;
-}
-
-.progress-emerald {
-  background: linear-gradient(90deg, #059669, #10b981);
-  box-shadow: 0 0 10px var(--color-emerald-glow);
-}
-
-.progress-amber {
-  background: linear-gradient(90deg, #d97706, #f59e0b);
-  box-shadow: 0 0 10px var(--color-amber-glow);
-}
-
-.progress-crimson {
-  background: linear-gradient(90deg, #dc2626, #ef4444);
-  box-shadow: 0 0 14px var(--color-crimson-glow);
-}
-
-/* ==========================================================================
-   3-COLUMN MULTI-CHANNEL VISUALIZER CANVAS GRID
-   ========================================================================== */
-.engine-grid-3col {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.85rem;
-}
-
-@media (max-width: 900px) {
-  .engine-grid-3col {
-    grid-template-columns: 1fr;
-  }
-}
-
-.visualizer-card {
-  padding: 1rem 1.15rem;
-}
-
-.live-indicator {
+.motion-head {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  justify-content: space-between;
+}
+
+.motion-head h4 {
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.fps-tag {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.64rem;
   color: var(--color-cyan);
   font-weight: 700;
 }
 
-.live-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--color-cyan);
-  box-shadow: 0 0 6px var(--color-cyan);
-  animation: liveBlink 1.2s infinite ease-in-out;
-}
-
-@keyframes liveBlink {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 1; }
-}
-
-.canvas-legend {
+.hist-legend {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
-}
-
-.legend-tag {
-  font-size: 0.65rem;
-  padding: 0.15rem 0.45rem;
-  border-radius: var(--radius-sm);
-  font-family: var(--font-mono);
-  font-weight: 600;
-}
-
-.baseline-tag {
-  background: rgba(99, 102, 241, 0.2);
-  color: #a5b4fc;
-  border: 1px solid rgba(99, 102, 241, 0.45);
-}
-
-.live-tag {
-  background: rgba(16, 185, 129, 0.2);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.45);
-}
-
-.canvas-container {
-  width: 100%;
-  height: 140px;
-  background: rgba(5, 8, 16, 0.85);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  position: relative;
-}
-
-.canvas-container canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-.canvas-footer-stats {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.5rem;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
 }
 
-/* ==========================================================================
-   REAL-TIME TELEMETRY LOG STREAM
-   ========================================================================== */
-.telemetry-stream-card {
-  padding: 1.1rem 1.35rem;
+.h-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
 }
 
-.btn-text-xs {
+.h-dot.blue { background: #818cf8; }
+.h-dot.green { background: #10b981; }
+
+.canvas-box {
+  width: 100%;
+  background: rgba(5, 8, 16, 0.85);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.canvas-box canvas {
+  width: 100%;
+  display: block;
+}
+
+/* Activity Log */
+.activity-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.activity-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.activity-title {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.btn-clear {
   background: none;
   border: 1px solid var(--border-subtle);
   color: var(--text-muted);
   font-size: 0.68rem;
-  font-family: var(--font-mono);
-  cursor: pointer;
-  padding: 0.2rem 0.5rem;
+  padding: 0.15rem 0.5rem;
   border-radius: var(--radius-sm);
+  cursor: pointer;
 }
 
-.btn-text-xs:hover {
-  color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.08);
+.btn-clear:hover {
+  color: #fff;
   border-color: var(--border-medium);
 }
 
-.telemetry-log-stream {
-  max-height: 150px;
+.activity-stream {
+  max-height: 120px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  padding-right: 0.4rem;
+  gap: 0.35rem;
   font-family: var(--font-mono);
   font-size: 0.72rem;
 }
 
-.telemetry-log-stream::-webkit-scrollbar {
-  width: 4px;
-}
-
-.telemetry-log-stream::-webkit-scrollbar-thumb {
-  background: var(--border-medium);
-  border-radius: 4px;
-}
-
 .stream-entry {
   display: flex;
-  align-items: flex-start;
-  gap: 0.55rem;
-  padding: 0.3rem 0.5rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
   border-radius: var(--radius-sm);
   background: rgba(255, 255, 255, 0.02);
-  border-left: 2px solid var(--border-subtle);
-  line-height: 1.4;
-}
-
-.stream-entry.entry-pass {
-  border-left-color: var(--color-emerald);
+  border-left: 2px solid var(--color-emerald);
 }
 
 .stream-entry.entry-warn {
   border-left-color: var(--color-amber);
-  background: rgba(245, 158, 11, 0.06);
 }
 
 .stream-entry.entry-alert {
   border-left-color: var(--color-crimson);
-  background: rgba(239, 68, 68, 0.1);
 }
 
 .stream-time {
   color: var(--text-dim);
-  flex-shrink: 0;
 }
-
-.stream-badge {
-  padding: 0.1rem 0.4rem;
-  border-radius: 3px;
-  font-weight: 800;
-  font-size: 0.65rem;
-  letter-spacing: 0.04em;
-}
-
-.badge-pass { background: rgba(16, 185, 129, 0.2); color: var(--color-emerald); }
-.badge-warn { background: rgba(245, 158, 11, 0.2); color: var(--color-amber); }
-.badge-alert { background: rgba(239, 68, 68, 0.25); color: var(--color-crimson); }
 
 .stream-msg {
   color: var(--text-secondary);
