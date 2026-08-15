@@ -39,11 +39,11 @@ Once a session cookie or token is live:
                ▼                         ▼                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
 │          FEATURE EXTRACTION PIPELINE (Zero-Raw-Data Privacy)           │
-│  • Keystroke Dwell Mean & Std (Keydown -> Keyup duration in ms)       │
-│  • Keystroke Digraph Flight Times (Keyup(N) -> Keydown(N+1) ms)       │
+│  • Keystroke Dwell Mean & Std (Keydown -> Keyup duration in ms)        │
+│  • Keystroke Digraph Flight Times (Keyup(N) -> Keydown(N+1) ms)        │
 │  • Mouse Kinematics: Velocity (px/s), Acceleration, Neuromuscular Jerk │
 │  • Trajectory Curvature: Path efficiency (Path Length / Euclidean dist)│
-│  • Click Hold Timing: Press-release delta and double-click cadence    │
+│  • Click Hold Timing: Press-release delta and double-click cadence     │
 └──────────────────────────────────┬─────────────────────────────────────┘
                                    │
                                    ▼
